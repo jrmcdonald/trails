@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Trails</title>
+
+    <script src="https://use.fontawesome.com/aef014167f.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.0-rc.3/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-draw@0.3.2/dist/leaflet.draw.css" />
+
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+        html, body, #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+        #map-overlay {
+            font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 10px;
+            z-index: 314159;
+        }
+        #map-overlay-inner {
+            background-color: #fff;
+            box-shadow:0 1px 2px rgba(0, 0, 0, 0.10);
+            border-radius: 3px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        #map-overlay-nav {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        #map-overlay-nav li {
+            display: inline-block;
+            margin-right: 10px;
+        }
+        #map-overlay-nav li:last-child {
+            margin-right: 0;
+        }
+        #map-overlay-nav a {
+            color: #333;
+            text-decoration: none;
+        }
+        #map-overlay-nav a[data-state=active] {
+            color: #2A5DB0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+    <div id="map-overlay">
+        <div id="map-overlay-inner">
+            <ul id="map-overlay-nav">
+                <li><i class="fa fa-floppy-o fa-lg fa-fw" aria-hidden="true"></i></li>
+                <li><i class="fa fa-download fa-lg fa-fw" aria-hidden="true"></i></li>
+            </ul>
+        </div>
+    </div>
+    
+    <script src="https://unpkg.com/leaflet@1.0.0-rc.3/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-draw@0.3.2/dist/leaflet.draw.js"></script>
+    <script src="https://unpkg.com/togpx@0.5.3/togpx.js"></script>
+    <script>
+        var DEFAULT_STYLE = {
+            "color": "#f06eaa",
+            "weight": 4,
+            "opacity": 0.5
+        };
+        var json;
+
+        var map = L.map('map').setView([53.0685, -4.0763], 15);
+        
+        L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/outdoors-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoicXd5Y2siLCJhIjoiY2lzeXhqa3Z6MDA1MDJ6bzN2MXY2eHh0bSJ9.iAPf9IhnK6N7MrkIM_3pJA', {
+            attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+            maxZoom: 20
+        }).addTo(map);
+
+        var drawnItems = new L.FeatureGroup().addTo(map);
+        var drawControl = new L.Control.Draw({
+            draw: {
+                polygon: false,
+                rectangle: false,
+                circle: false
+            },
+            edit: {
+                featureGroup: drawnItems
+            }
+        }).addTo(map);
+
+        map.on('draw:created', function(e) {
+            drawnItems.addLayer(e.layer);
+        });
+
+        function exportGpx() {
+            var xml = togpx(drawnItems.toGeoJSON());
+            console.log(xml);
+        }
+
+        function exportGeoJson() {
+            json = drawnItems.toGeoJSON();
+        }
+
+        function importGeoJson() {
+            drawnItems.clearLayers();
+
+            geoJsonLayer = L.geoJson(json, {
+                style: DEFAULT_STYLE,
+                onEachFeature: function (feature, layer) {
+                    drawnItems.addLayer(layer);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
