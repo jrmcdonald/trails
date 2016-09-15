@@ -4,7 +4,7 @@ var Cloudant = require('cloudant');
 var datasources = require('./datasources.json');
 
 exports.setupDb = function(database, callback) {
-  var cloudantURL = cfenv.getAppEnv().getServiceURL("cloudantNoSQLDB", {}); 
+  var cloudantURL = cfenv.getAppEnv().getServiceURL("trails-cloudantNoSQLDB", {}); 
 
   if (!cloudantURL) {
     callback("Error: No Cloudant URL defined.");
