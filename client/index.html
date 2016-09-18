@@ -1,11 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
     <title>Trails</title>
 
     <script src="https://use.fontawesome.com/aef014167f.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.0-rc.3/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-draw@0.3.2/dist/leaflet.draw.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.4/css/bootstrap.min.css" integrity="2hfp1SzUoho7/TsGGGDaFdsuuDL0LX2hnUp6VkX3CUQ2K4K+xjboZdsXyp4oUHZj" crossorigin="anonymous">
 
     <style>
         body {
@@ -49,6 +54,13 @@
             color: #333;
             text-decoration: none;
         }
+        #map-overlay-nav a span { 
+            height: 1px; 
+            width: 1px; 
+            position: absolute; 
+            overflow: hidden; 
+            top: -10px; 
+        }
         #map-overlay-nav a[data-state=active] {
             color: #2A5DB0;
         }
@@ -60,15 +72,58 @@
     <div id="map-overlay">
         <div id="map-overlay-inner">
             <ul id="map-overlay-nav">
-                <li><i class="fa fa-floppy-o fa-lg fa-fw" aria-hidden="true"></i></li>
+                <li><a href="#" data-toggle="modal" data-target=".export-model" id="export-modal-link"><i class="fa fa-floppy-o fa-lg fa-fw" aria-hidden="true"></i><span>Export</span></a></li>
                 <li><i class="fa fa-download fa-lg fa-fw" aria-hidden="true"></i></li>
             </ul>
         </div>
     </div>
+
+    <div class="modal fade export-model" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="gridModalLabel">Modal title</h4>
+                </div>
+                <div class="modal-body">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#export-geojson" role="tab">GeoJSON</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#export-gpx" role="tab">GPX</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#export-kml" role="tab">KML</a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="export-geojson" role="tabpanel">
+                            <pre class=".pre-scrollable"><code></code></pre>
+                        </div>
+                        <div class="tab-pane" id="export-gpx" role="tabpanel">
+                            <pre class=".pre-scrollable"><code</code></pre>
+                        </div>
+                        <div class="tab-pane" id="export-kml" role="tabpanel">...</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Download</button>
+                </div>
+            </div>
+        </div>
+    </div>
     
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js" integrity="sha384-THPy051/pYDQGanwU6poAc/hOdQxjnOEXzbT+OuUAFqNqFjL+4IGLBgCJC3ZOShY" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.2.0/js/tether.min.js" integrity="sha384-Plbmg8JY28KFelvJVai01l8WyZzrYWG825m+cZ0eDDS1f7d/js6ikvy1+X+guPIB" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.4/js/bootstrap.min.js" integrity="VjEeINv9OSwtWFLAtmc4JCtEJXXBub00gtSnszmspDLCtC0I4z4nqz7rEFbIZLLU" crossorigin="anonymous"></script>
+    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
     <script src="https://unpkg.com/leaflet@1.0.0-rc.3/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet-draw@0.3.2/dist/leaflet.draw.js"></script>
     <script src="https://unpkg.com/togpx@0.5.3/togpx.js"></script>
+    <script src="./vendors/vkbeautify/vkbeautify.0.99.00.beta.js"></script>
     <script>
         var DEFAULT_STYLE = {
             "color": "#f06eaa",
@@ -100,13 +155,24 @@
             drawnItems.addLayer(e.layer);
         });
 
-        function exportGpx() {
-            var xml = togpx(drawnItems.toGeoJSON());
-            console.log(xml);
+        $('#export-modal-link').on('click', onExportClicked);
+
+        function onExportClicked() {
+            var json = createGeoJSON();
+            var gpx = createGPX();
+
+            console.log(gpx);
+
+            $('#export-geojson pre code').text(vkbeautify.json(JSON.stringify(json)));
+            $('#export-gpx pre code').text(vkbeautify.xml(gpx));
         }
 
-        function exportGeoJson() {
-            json = drawnItems.toGeoJSON();
+        function createGPX() {
+            return togpx(drawnItems.toGeoJSON());
+        }
+
+        function createGeoJSON() {
+            return drawnItems.toGeoJSON();
         }
 
         function importGeoJson() {
