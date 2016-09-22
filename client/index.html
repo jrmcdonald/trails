@@ -13,104 +13,114 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.4/css/bootstrap.min.css" integrity="2hfp1SzUoho7/TsGGGDaFdsuuDL0LX2hnUp6VkX3CUQ2K4K+xjboZdsXyp4oUHZj" crossorigin="anonymous">
 
     <style>
-        body {
+        html, body {
             padding: 0;
             margin: 0;
-        }
-        html, body, #map {
-            position: absolute;
-            top: 0;
-            bottom: 0;
+            height: 100%;
+            overflow: hidden;
             width: 100%;
         }
-        #map-overlay {
-            font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-            position: absolute;
-            top: 0;
-            right: 0;
-            padding: 10px;
-            z-index: 314159;
+        #map {
+            width: auto;
+            height: 100%;
         }
-        #map-overlay-inner {
-            background-color: #fff;
+        .trails-controls {
+            left: auto;
+            right: 10px;
+            top: 10px;
             box-shadow:0 1px 2px rgba(0, 0, 0, 0.10);
             border-radius: 3px;
-            padding: 10px;
-            margin-bottom: 10px;
+            padding: .5rem .5em;
         }
-        #map-overlay-nav {
-            margin: 0;
-            padding: 0;
-            list-style: none;
-        }
-        #map-overlay-nav li {
-            display: inline-block;
-            margin-right: 10px;
-        }
-        #map-overlay-nav li:last-child {
-            margin-right: 0;
-        }
-        #map-overlay-nav a {
+        .trails-controls a {
             color: #333;
             text-decoration: none;
         }
-        #map-overlay-nav a span { 
+        .trails-controls a span { 
             height: 1px; 
             width: 1px; 
             position: absolute; 
             overflow: hidden; 
             top: -10px; 
         }
-        #map-overlay-nav a[data-state=active] {
-            color: #2A5DB0;
+        .trails-controls a[data-toggle=modal] {
+            outline: 0;
+        }
+        .export-modal .modal-header {
+            padding-bottom: 0;
+            border: 0;
+        }
+        .export-modal .modal-body {
+            padding-bottom: 0;
+        }
+        .export-modal .modal-footer {
+            padding-top: 0;
+            border: 0;
+        }
+        .export-modal .tab-pane {
+            padding: 1.5rem 0;
+            margin-right: 0;
+            margin-bottom: 0;
+            margin-left: 0;
+        }
+        pre {
+            display: block;
+            padding: 1.5rem;
+            margin-right: 0;
+            margin-bottom: 0;
+            margin-left: 0;
+            border-width: .2rem;
+            background-color: #f5f5f5;
+            border: 1px solid #ccc;
+            border-radius: 4px;
         }
     </style>
 </head>
 
 <body>
     <div id="map"></div>
-    <div id="map-overlay">
-        <div id="map-overlay-inner">
-            <ul id="map-overlay-nav">
-                <li><a href="#" data-toggle="modal" data-target=".export-model" id="export-modal-link"><i class="fa fa-floppy-o fa-lg fa-fw" aria-hidden="true"></i><span>Export</span></a></li>
-                <li><i class="fa fa-download fa-lg fa-fw" aria-hidden="true"></i></li>
-            </ul>
+
+    <div class="navbar navbar-fixed-top navbar-light bg-faded trails-controls">
+        <div id="nav navbar-nav">
+            <a href="#" class="nav-item nav-link pull-xs-right" data-toggle="modal" data-target=".export-modal" id="export-modal-link"><i class="fa fa-floppy-o fa-lg fa-fw" aria-hidden="true"></i><span>Export</span></a>
         </div>
     </div>
 
-    <div class="modal fade export-model" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal fade export-modal" tabindex="-1" role="dialog" aria-labelledby="gridModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="gridModalLabel">Modal title</h4>
+                    <h4 class="modal-title" id="gridModalLabel">Export Map Data</h4>
                 </div>
                 <div class="modal-body">
-                    <ul class="nav nav-tabs" role="tablist">
+                    <ul class="nav nav-pills" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" data-toggle="tab" href="#export-geojson" role="tab">GeoJSON</a>
+                            <a class="nav-link active" data-toggle="pill" href="#export-geojson" role="tab">GeoJSON</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#export-gpx" role="tab">GPX</a>
+                            <a class="nav-link" data-toggle="pill" href="#export-gpx" role="tab">GPX</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#export-kml" role="tab">KML</a>
+                            <a class="nav-link" data-toggle="pill" href="#export-kml" role="tab">KML</a>
                         </li>
                     </ul>
 
                     <div class="tab-content">
-                        <div class="tab-pane active" id="export-geojson" role="tabpanel">
-                            <pre class=".pre-scrollable"><code></code></pre>
+                        <div class="tab-pane active" id="export-geojson" data-type="geojson" role="tabpanel">
+                            <pre class="pre-scrollable"><code></code></pre>
                         </div>
-                        <div class="tab-pane" id="export-gpx" role="tabpanel">
-                            <pre class=".pre-scrollable"><code</code></pre>
+                        <div class="tab-pane" id="export-gpx" data-type="gpx" role="tabpanel">
+                            <pre class="pre-scrollable"><code></code></pre>
                         </div>
-                        <div class="tab-pane" id="export-kml" role="tabpanel">...</div>
+                        <div class="tab-pane" id="export-kml" data-type="kml" role="tabpanel">
+                            <pre class="pre-scrollable"><code></code></pre>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Download</button>
+                    <button type="button" class="btn btn-primary" id="download-link">Download</button>
                 </div>
             </div>
         </div>
@@ -124,13 +134,52 @@
     <script src="https://unpkg.com/leaflet-draw@0.3.2/dist/leaflet.draw.js"></script>
     <script src="https://unpkg.com/togpx@0.5.3/togpx.js"></script>
     <script src="./vendors/vkbeautify/vkbeautify.0.99.00.beta.js"></script>
+    <script src="https://cdn.rawgit.com/eligrey/FileSaver.js/master/FileSaver.js"></script>
+    <script src="https://cdn.rawgit.com/mapbox/tokml/master/tokml.js"></script>
     <script>
         var DEFAULT_STYLE = {
-            "color": "#f06eaa",
+            "color": "#F06EAA",
             "weight": 4,
             "opacity": 0.5
         };
-        var json;
+
+        var SELECTED_STYLE = {
+            "color": "#FF4E32",
+            "weight": 6,
+            "opacity": 0.5
+        };
+
+        var EXPORT_DATA = {
+            geojson: {
+                ext: "json",
+                mime: "application/json"
+            },
+            gpx: {
+                ext: "gpx",
+                mime: "application/gpx+xml"
+            },
+            kml: {
+                ext: "kml",
+                mime: "application/vnd.google-earth.kml+xml"
+            }
+        }
+
+        var exportMethods = {
+            "geojson": function(beautify = false) {
+                var data = JSON.stringify(drawnItems.toGeoJSON());
+                return (beautify) ? vkbeautify.json(data) : data;
+            },
+            "gpx": function(beautify = false) {
+                var data = togpx(drawnItems.toGeoJSON());
+                return (beautify) ? vkbeautify.xml(data) : data;
+            },
+            "kml": function(beautify = false) {
+                var data = tokml(drawnItems.toGeoJSON());
+                return (beautify) ? vkbeautify.xml(data) : data;
+            }
+        };
+
+        var selectedLayer;
 
         var map = L.map('map').setView([53.0685, -4.0763], 15);
         
@@ -152,30 +201,67 @@
         }).addTo(map);
 
         map.on('draw:created', function(e) {
-            drawnItems.addLayer(e.layer);
+            var layer = e.layer;
+
+            layer.on('click', onLayerClicked);
+
+            // http://stackoverflow.com/a/35819611
+            var feature = layer.feature = layer.feature || {};
+            feature.type = "Feature";
+            feature.properties = feature.properties || {};
+            feature.properties.name = "Track" + Math.floor(Math.random() * 1000);
+            
+            drawnItems.addLayer(layer);
         });
 
         $('#export-modal-link').on('click', onExportClicked);
+        $('#download-link').on('click', onDownloadClicked);
 
         function onExportClicked() {
-            var json = createGeoJSON();
-            var gpx = createGPX();
-
-            console.log(gpx);
-
-            $('#export-geojson pre code').text(vkbeautify.json(JSON.stringify(json)));
-            $('#export-gpx pre code').text(vkbeautify.xml(gpx));
+            $('.export-modal .tab-pane').each(function() {
+                var dataType = $(this).data('type');
+                console.log(dataType);
+                $('pre code', this).text(exportMethods[dataType](true));
+            });
         }
 
-        function createGPX() {
-            return togpx(drawnItems.toGeoJSON());
+        function onDownloadClicked() {
+            var dataType = $('.export-modal .tab-content .active').data('type');
+
+            var data = exportMethods[dataType]();
+            var filename = "Route1." + EXPORT_DATA[dataType].ext;
+            var options = {
+                type: EXPORT_DATA[dataType].mime + ";charset=utf-8"
+            }
+
+            saveAs(new Blob([data], options), filename);
         }
 
-        function createGeoJSON() {
-            return drawnItems.toGeoJSON();
+        function onLayerClicked(e) {
+            var layer = e.target;
+
+            if (layer instanceof L.Path) {
+                toggleSelectedLayer(layer);
+            }
         }
 
-        function importGeoJson() {
+        function toggleSelectedLayer(layer) {
+            if (selectedLayer !== undefined) {
+                if (selectedLayer._leaflet_id === layer._leaflet_id) {
+                    selectedLayer.setStyle(DEFAULT_STYLE);
+                    selectedLayer = undefined;
+                } else {
+                    selectedLayer.setStyle(DEFAULT_STYLE);
+                    selectedLayer = layer;
+                    selectedLayer.setStyle(SELECTED_STYLE);
+                }
+            } else {
+                selectedLayer = layer;
+                selectedLayer.setStyle(SELECTED_STYLE);
+            }
+        }
+
+        function importGeoJson(json) {
             drawnItems.clearLayers();
 
             geoJsonLayer = L.geoJson(json, {
