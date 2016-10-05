@@ -10,12 +10,17 @@
     "cloudant": "^1.4.3",
     "compression": "^1.0.3",
     "cors": "^2.5.2",
+    "leaflet": "^1.0.1",
+    "leaflet-draw": "^0.3.2",
     "loopback": "^2.22.0",
     "loopback-boot": "^2.6.5",
     "loopback-component-explorer": "^2.1.0",
     "loopback-connector-cloudant": "^1.0.11",
     "loopback-datasource-juggler": "^2.39.0",
-    "serve-favicon": "^2.0.1"
+    "serve-favicon": "^2.0.1",
+    "togpx": "^0.5.3",
+    "tokml": "^0.4.0",
+    "vkbeautify": "^0.99.1"
   },
   "license": "MIT"
 }
