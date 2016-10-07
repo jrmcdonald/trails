@@ -49,7 +49,7 @@ var exportMethods = {
 
 var selectedLayer;
 
-var map = L.map('map').setView([53.0685, -4.0763], 15);
+var map = L.map('map', { closePopupOnClick: false }).setView([53.0685, -4.0763], 15);
 
 L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/outdoors-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoicXd5Y2siLCJhIjoiY2lzeXhqa3Z6MDA1MDJ6bzN2MXY2eHh0bSJ9.iAPf9IhnK6N7MrkIM_3pJA', {
     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
@@ -77,7 +77,7 @@ map.on('draw:created', function(e) {
     var feature = layer.feature = layer.feature || {};
     feature.type = "Feature";
     feature.properties = feature.properties || {};
-    feature.properties.name = "Track" + Math.floor(Math.random() * 1000);
+    feature.properties.name = "Trail" + Math.floor(Math.random() * 1000);
     
     drawnItems.addLayer(layer);
 });
@@ -117,24 +117,48 @@ function onLayerClicked(e) {
     var layer = e.target;
 
     if (layer instanceof L.Path) {
-        toggleSelectedLayer(layer);
+        toggleSelectedLayer(layer, e);
     }
 }
 
-function toggleSelectedLayer(layer) {
+function toggleSelectedLayer(layer, e) {
     if (selectedLayer !== undefined) {
         if (selectedLayer._leaflet_id === layer._leaflet_id) {
             selectedLayer.setStyle(DEFAULT_STYLE);
             selectedLayer = undefined;
+            map.closePopup();
         } else {
             selectedLayer.setStyle(DEFAULT_STYLE);
             selectedLayer = layer;
             selectedLayer.setStyle(SELECTED_STYLE);
+            openPopup(e.latlng, layer);
         }
     } else {
         selectedLayer = layer;
         selectedLayer.setStyle(SELECTED_STYLE);
+        openPopup(e.latlng, layer);
     }
+}
+
+function openPopup(latlng, layer) {
+    var popup = L.popup()
+                .setLatLng(latlng)
+                .setContent(getPopupTemplate(layer))
+                .openOn(map);
+    
+    map.on('popupclose', function() {
+        toggleSelectedLayer(layer);
+    });
+}
+
+function getPopupTemplate(layer) {
+    return '<form class="form-inline"> \
+        <div class="form-group"> \
+            <label class="sr-only" for="popupPathName">Trail name</label> \
+            <input type="text" class="form-control" id="popupPathName" placeholder="' + layer.feature.properties.name + '"> \
+        </div> \
+        <button type="submit" class="btn btn-primary">Save</button> \
+    </form>';
 }
 
 function importGeoJson(json) {
