@@ -22,5 +22,10 @@
     "tokml": "^0.4.0",
     "vkbeautify": "^0.99.1"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-concat-css": "^2.3.0",
+    "gulp-replace": "^0.5.4"
+  }
 }

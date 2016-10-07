@@ -1,0 +1,61 @@
+html, body {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    overflow: hidden;
+    width: 100%;
+}
+#map {
+    width: auto;
+    height: 100%;
+}
+.trails-controls {
+    left: auto;
+    right: 10px;
+    top: 10px;
+    box-shadow:0 1px 2px rgba(0, 0, 0, 0.10);
+    border-radius: 3px;
+    padding: .5rem .5em;
+}
+.trails-controls a {
+    color: #333;
+    text-decoration: none;
+}
+.trails-controls a span { 
+    height: 1px; 
+    width: 1px; 
+    position: absolute; 
+    overflow: hidden; 
+    top: -10px; 
+}
+.trails-controls a[data-toggle=modal] {
+    outline: 0;
+}
+.export-modal .modal-header {
+    padding-bottom: 0;
+    border: 0;
+}
+.export-modal .modal-body {
+    padding-bottom: 0;
+}
+.export-modal .modal-footer {
+    padding-top: 0;
+    border: 0;
+}
+.export-modal .tab-pane {
+    padding: 1.5rem 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+}
+pre {
+    display: block;
+    padding: 1.5rem;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    border-width: .2rem;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
