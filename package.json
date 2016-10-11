@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "server/server.js",
   "scripts": {
-    "start": "node ."
+    "start": "node .",
+    "build": "browserify client/js/app.js -o client/js/bundle.js",
+    "watch": "watchify client/js/app.js -o client/js/bundle.js --debug --verbose"
   },
   "dependencies": {
     "cfenv": "^1.0.3",
