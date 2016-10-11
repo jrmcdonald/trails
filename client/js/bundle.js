@@ -148,9 +148,17 @@ function openPopup(latlng, layer) {
                 .setLatLng(latlng)
                 .setContent(getPopupTemplate(layer))
                 .openOn(map);
+
+    $('#savePathName').on('click', function() {
+        layer.feature.properties.name = $('#popupPathName').val();
+        map.closePopup();
+    });
     
-    map.on('popupclose', function() {
-        toggleSelectedLayer(layer);
+    map.on('popupclose', function onPopupClose() {
+        if (selectedLayer !== undefined) {
+           toggleSelectedLayer(layer);
+        }
+        map.off('popupclose', onPopupClose);
     });
 }
 
@@ -160,7 +168,7 @@ function getPopupTemplate(layer) {
             <label class="sr-only" for="popupPathName">Trail name</label> \
             <input type="text" class="form-control" id="popupPathName" placeholder="' + layer.feature.properties.name + '"> \
         </div> \
-        <button type="submit" class="btn btn-primary">Save</button> \
+        <button type="button" id="savePathName" class="btn btn-primary">Save</button> \
     </form>';
 }
 
