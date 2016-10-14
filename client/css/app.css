@@ -5,14 +5,11 @@ html, body {
     overflow: hidden;
     width: 100%;
 }
-#map {
-    width: auto;
-    height: 100%;
-}
 .trails-controls {
     left: auto;
     right: 10px;
     top: 10px;
+    min-height: auto;
     box-shadow:0 1px 2px rgba(0, 0, 0, 0.10);
     border-radius: 3px;
     padding: .5rem .5em;
@@ -28,12 +25,15 @@ html, body {
     overflow: hidden; 
     top: -10px; 
 }
-.trails-controls a[data-toggle=modal] {
+.trails-controls a {
     outline: 0;
 }
 .export-modal .modal-header {
     padding-bottom: 0;
     border: 0;
+}
+.modal-header button.close {
+    outline: 0;
 }
 .export-modal .modal-body {
     padding-bottom: 0;

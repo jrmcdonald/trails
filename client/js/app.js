@@ -1,181 +1,216 @@
-require('leaflet');
-require('leaflet-draw');
-
+var angular = require('angular');
+var bootstrap = require('angular-ui-bootstrap');
+var nemLogging = require('angular-simple-logger');
+var leaflet = require('leaflet');
+var leafletDraw = require('leaflet-draw');
 var togpx = require('togpx');
 var tokml = require('tokml');
+var uiLeaflet = require('ui-leaflet');
+var uiLeafletDraw = require('ui-leaflet-draw');
 var vkbeautify = require('vkbeautify');
 
-var DEFAULT_STYLE = {
-    "color": "#F06EAA",
-    "weight": 4,
-    "opacity": 0.5
-};
+var qwyck = qwyck || {};
 
-var SELECTED_STYLE = {
-    "color": "#FF4E32",
-    "weight": 6,
-    "opacity": 0.5
-};
-
-var EXPORT_DATA = {
-    geojson: {
+qwyck.dataTypes = {
+    json: {
         ext: "json",
-        mime: "application/json"
+        mime: "application/json",
+        output: function(input, beautify = false) {
+            var data = JSON.stringify(input.toGeoJSON());
+            return (beautify) ? vkbeautify.json(data) : data;
+        }
     },
     gpx: {
         ext: "gpx",
-        mime: "application/gpx+xml"
+        mime: "application/gpx+xml",
+        output: function(input, beautify = false) {
+            var data = togpx(input.toGeoJSON());
+            return (beautify) ? vkbeautify.xml(data) : data;
+        }
     },
     kml: {
         ext: "kml",
-        mime: "application/vnd.google-earth.kml+xml"
+        mime: "application/vnd.google-earth.kml+xml",
+        output: function(input, beautify = false) {
+            var data = tokml(input.toGeoJSON());
+            return (beautify) ? vkbeautify.xml(data) : data;
+        }
     }
 }
 
-var exportMethods = {
-    "geojson": function(beautify = false) {
-        var data = JSON.stringify(drawnItems.toGeoJSON());
-        return (beautify) ? vkbeautify.json(data) : data;
-    },
-    "gpx": function(beautify = false) {
-        var data = togpx(drawnItems.toGeoJSON());
-        return (beautify) ? vkbeautify.xml(data) : data;
-    },
-    "kml": function(beautify = false) {
-        var data = tokml(drawnItems.toGeoJSON());
-        return (beautify) ? vkbeautify.xml(data) : data;
-    }
-};
+var app = angular.module('trails', ['nemLogging', 'ui-leaflet', 'ui.bootstrap']);
 
-var selectedLayer;
-
-var map = L.map('map', { closePopupOnClick: false }).setView([53.0685, -4.0763], 15);
-
-L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/outdoors-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoicXd5Y2siLCJhIjoiY2lzeXhqa3Z6MDA1MDJ6bzN2MXY2eHh0bSJ9.iAPf9IhnK6N7MrkIM_3pJA', {
-    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-    maxZoom: 20
-}).addTo(map);
-
-var drawnItems = new L.FeatureGroup().addTo(map);
-var drawControl = new L.Control.Draw({
-    draw: {
-        polygon: false,
-        rectangle: false,
-        circle: false
-    },
-    edit: {
-        featureGroup: drawnItems
-    }
-}).addTo(map);
-
-map.on('draw:created', function(e) {
-    var layer = e.layer;
-
-    layer.on('click', onLayerClicked);
-
-    // http://stackoverflow.com/a/35819611
-    var feature = layer.feature = layer.feature || {};
-    feature.type = "Feature";
-    feature.properties = feature.properties || {};
-    feature.properties.name = "Trail" + Math.floor(Math.random() * 1000);
-    
-    drawnItems.addLayer(layer);
+angular.module('trails').directive('navigation', function() {
+    return {
+        restrict: 'E',
+        replace: true,
+        templateUrl: 'templates/navigation.html'
+    };
 });
 
-$('#export-modal-link').on('click', onExportClicked);
-$('#download-link').on('click', onDownloadClicked);
+angular.module('trails').directive('export', function() {
+    return {
+        restrict: 'E',
+        templateUrl: 'templates/export.html',
+    };
+});
 
-function onExportClicked() {
-    $('.export-modal .tab-pane').each(function() {
-        var dataType = $(this).data('type');
-        $('pre code', this).text(exportMethods[dataType](true));
-    });
-}
+angular.module('trails').directive('popup', function($compile, $templateRequest, $sce) {
+    return {
+        restrict: 'E',
+        replace: true,
+        link: function(scope, element, attrs) {
+            var templateUrl = $sce.getTrustedResourceUrl('templates/popup.html');
 
-function onDownloadClicked() {
-    var dataType = $('.export-modal .tab-content .active').data('type');
+            $templateRequest(templateUrl).then(function(template) {
+                var html = $compile(template)(scope);
+                element.append(html);
+            });
+        }
+    };
+});
 
-    var data = exportMethods[dataType]();
-    var filename = "Route1." + EXPORT_DATA[dataType].ext;
-    var options = {
-        type: EXPORT_DATA[dataType].mime + ";charset=utf-8"
+angular.module('trails').filter('formatFeatures', function() {
+    return function(input, format) {
+        return (input instanceof L.FeatureGroup) ? qwyck.dataTypes[format].output(input, true) : '';
     }
+});
 
-    // http://stackoverflow.com/a/20194533
-    var tempElem = window.document.createElement('a');
-    tempElem.href = window.URL.createObjectURL(new Blob([data], options));
-    tempElem.download = filename;
-
-    document.body.appendChild(tempElem)
-    tempElem.click();
+angular.module('trails').controller("mapCtrl", ['$scope', '$compile', 'leafletDrawEvents', function($scope, $compile, leafletDrawEvents) {
+    $scope.features = new L.FeatureGroup();
     
-    // tidy up
-    document.body.removeChild(tempElem)
-}
+    // Set up ui-leaflet and ui-leaflet-draw options
+    angular.extend($scope, {
+        map: {
+            defaults: {
+                maxZoom: 20,
+                minZoom: 1,
+                closePopupOnClick: false,
+                tileLayer: 'https://api.mapbox.com/styles/v1/mapbox/outdoors-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoicXd5Y2siLCJhIjoiY2lzeXhqa3Z6MDA1MDJ6bzN2MXY2eHh0bSJ9.iAPf9IhnK6N7MrkIM_3pJA',
+                tileLayerOptions: {
+                    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>'
+                },
+                center: {
+                    lat: 53.0685,
+                    lng: -4.0763,
+                    zoom: 15
+                }
+            },
+            drawOptions: {
+                draw: {
+                    polygon: false,
+                    rectangle: false,
+                    circle: false,
+                    marker: false
+                },
+                edit: {
+                    featureGroup: $scope.features
+                } 
+            }
+        }
+    });
 
-function onLayerClicked(e) {
-    var layer = e.target;
+    // Handle leafletDrawEvents
+    var handle = {
+        created: function(e, leafletEvent, leafletObject, model, modelName) {
+            var layer = leafletEvent.layer;
+            
+            // Create & bind popup template to the newly created layer
+            var popupScope = $scope.$new(true);
+            popupScope.layer = layer;
+            var popupHtml = $compile('<popup></popup>')(popupScope)[0];
+            layer.bindPopup(popupHtml);
 
-    if (layer instanceof L.Path) {
-        toggleSelectedLayer(layer, e);
+            // http://stackoverflow.com/a/35819611
+            var feature = layer.feature = layer.feature || {};
+            feature.type = "Feature";
+            feature.properties = feature.properties || {};
+            feature.properties.name = "Random" + Math.floor(Math.random() * 1000);
+
+            $scope.features.addLayer(layer);
+        },
+        edited: function(arg) {},
+        deleted: function(arg) {
+            var layers;
+            layers = arg.layers;
+            $scope.features.removeLayer(layer);
+        },
+        drawstart: function(arg) {},
+        drawstop: function(arg) {},
+        editstart: function(arg) {},
+        editstop: function(arg) {},
+        deletestart: function(arg) {},
+        deletestop: function(arg) {}
+    };
+
+    var drawEvents = leafletDrawEvents.getAvailableEvents();
+
+    drawEvents.forEach(function(eventName){
+        $scope.$on('leafletDirectiveDraw.' + eventName, function(e, payload) {
+          var leafletEvent, leafletObject, model, modelName;
+          leafletEvent = payload.leafletEvent, leafletObject = payload.leafletObject, model = payload.model, modelName = payload.modelName;
+
+          handle[eventName.replace('draw:','')](e, leafletEvent, leafletObject, model, modelName);
+        });
+    });
+}]);
+
+angular.module('trails').controller('exportCtrl', ['$scope', '$uibModal', function($scope, $uibModal){
+    $scope.dataTypes = qwyck.dataTypes;
+    $scope.tabs = [
+        {
+            title: "GeoJSON",
+            format: "json"
+        },
+        {
+            title: "GPX",
+            format: "gpx"
+        },
+        {
+            title: "KML",
+            format: "kml"
+        }
+    ];
+
+    $scope.setExportFormat = function(format) {
+        $scope.exportFormat = format;
     }
-}
 
-function toggleSelectedLayer(layer, e) {
-    if (selectedLayer !== undefined) {
-        if (selectedLayer._leaflet_id === layer._leaflet_id) {
-            selectedLayer.setStyle(DEFAULT_STYLE);
-            selectedLayer = undefined;
-            map.closePopup();
-        } else {
-            selectedLayer.setStyle(DEFAULT_STYLE);
-            selectedLayer = layer;
-            selectedLayer.setStyle(SELECTED_STYLE);
-            openPopup(e.latlng, layer);
-        }
-    } else {
-        selectedLayer = layer;
-        selectedLayer.setStyle(SELECTED_STYLE);
-        openPopup(e.latlng, layer);
-    }
-}
+    $scope.openExport = function () {
+        var modalInstance;
+        var modalScope = $scope.$new();
 
-function openPopup(latlng, layer) {
-    var popup = L.popup()
-                .setLatLng(latlng)
-                .setContent(getPopupTemplate(layer))
-                .openOn(map);
+        modalScope.download = function () {
+            var format = $scope.exportFormat;
+            var data = $scope.dataTypes[format].output($scope.$parent.features);
+            var filename = "Route1." + $scope.dataTypes[format].ext;
+            var options = {
+                type: $scope.dataTypes[format].mime + ";charset=utf-8"
+            }
 
-    $('#savePathName').on('click', function() {
-        layer.feature.properties.name = $('#popupPathName').val();
-        map.closePopup();
-    });
-    
-    map.on('popupclose', function onPopupClose() {
-        if (selectedLayer !== undefined) {
-           toggleSelectedLayer(layer);
-        }
-        map.off('popupclose', onPopupClose);
-    });
-}
+            // http://stackoverflow.com/a/20194533
+            var tempElem = window.document.createElement('a');
+            tempElem.href = window.URL.createObjectURL(new Blob([data], options));
+            tempElem.download = filename;
 
-function getPopupTemplate(layer) {
-    return '<form class="form-inline"> \
-        <div class="form-group"> \
-            <label class="sr-only" for="popupPathName">Trail name</label> \
-            <input type="text" class="form-control" id="popupPathName" placeholder="' + layer.feature.properties.name + '"> \
-        </div> \
-        <button type="button" id="savePathName" class="btn btn-primary">Save</button> \
-    </form>';
-}
+            document.body.appendChild(tempElem)
+            tempElem.click();
+            
+            // tidy up
+            document.body.removeChild(tempElem)
+        };
 
-function importGeoJson(json) {
-    drawnItems.clearLayers();
+        modalScope.close = function () {
+            modalInstance.dismiss('cancel');
+        };      
 
-    geoJsonLayer = L.geoJson(json, {
-        style: DEFAULT_STYLE,
-        onEachFeature: function (feature, layer) {
-            drawnItems.addLayer(layer);
-        }
-    });
-}
+        modalInstance = $uibModal.open({
+            template: '<export></export>',
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            windowClass: 'export-modal',
+            size: 'lg',
+            scope: modalScope
+        });
+    };
+}]);
