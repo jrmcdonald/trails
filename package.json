@@ -3,9 +3,7 @@
   "version": "1.0.0",
   "main": "server/server.js",
   "scripts": {
-    "start": "node .",
-    "build": "browserify client/js/app.js -o client/js/bundle.js",
-    "watch": "watchify client/js/app.js -o client/js/bundle.js --debug --verbose"
+    "start": "node ."
   },
   "dependencies": {
     "angular": "^1.5.8",
@@ -16,7 +14,7 @@
     "compression": "^1.0.3",
     "cors": "^2.5.2",
     "leaflet": "^1.0.1",
-    "leaflet-draw": "^0.3.2",
+    "leaflet-draw": "^0.4.0",
     "loopback": "^2.22.0",
     "loopback-boot": "^2.6.5",
     "loopback-component-explorer": "^2.1.0",
@@ -31,8 +29,11 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "browserify": "^13.1.0",
     "gulp": "^3.9.1",
     "gulp-concat-css": "^2.3.0",
-    "gulp-replace": "^0.5.4"
+    "gulp-connect": "^5.0.0",
+    "gulp-replace": "^0.5.4",
+    "vinyl-source-stream": "^1.1.0"
   }
 }
