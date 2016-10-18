@@ -14,7 +14,8 @@
     ]
   },
   "User": {
-    "dataSource": "cloudant"
+    "dataSource": "cloudant",
+    "public": false
   },
   "AccessToken": {
     "dataSource": "cloudant",
