@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="trails">
+<html lang="en" ng-app="trailsApp">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -13,8 +13,8 @@
     <link rel="stylesheet" href="assets/css/app.css" />
 </head>
 
-<body ng-controller="mapCtrl">
-    <leaflet defaults="map.defaults" lf-draw="map.drawOptions" height="100%" width="100%"></leaflet>
+<body ng-controller="MapCtrl">
+    <leaflet defaults="map.defaults" bounds="map.bounds" lf-center="map.center" lf-draw="map.drawOptions" height="100%" width="100%"></leaflet>
     <navigation></navigation>
     <script src="app/main.js"></script>
 </body>

@@ -1,11 +1,11 @@
 <div class="modal-header">
     <button type="button" class="close" aria-label="Close" ng-click="close()"><span aria-hidden="true">&times;</span></button>
-    <h3 class="modal-title" id="modal-title">Export Map Data</h3>
+    <h3 class="modal-title" id="modal-title">Download Map Data</h3>
 </div>
 <div class="modal-body" id="modal-body">
     <uib-tabset type="pills">
         <uib-tab ng-repeat="tab in tabs" heading="{{ tab.title }}" select="setExportFormat(tab.format)">
-            <pre class="pre-scrollable"><code>{{ $parent.features | formatFeatures: tab.format }}</code></pre>
+            <pre class="pre-scrollable"><code>{{ $parent.features | beautifyFilter: tab.format }}</code></pre>
         </uib-tab>
     </uib-tabset>
 </div>

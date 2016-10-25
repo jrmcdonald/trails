@@ -28,21 +28,24 @@ html, body {
 .trails-controls a {
     outline: 0;
 }
-.export-modal .modal-header {
+.modal-header {
     padding-bottom: 0;
     border: 0;
 }
 .modal-header button.close {
     outline: 0;
 }
-.export-modal .modal-body {
+.modal-body {
     padding-bottom: 0;
 }
-.export-modal .modal-footer {
+.modal-body label {
+    font-weight: normal;
+}
+.modal-footer {
     padding-top: 0;
     border: 0;
 }
-.export-modal .tab-pane {
+.download-modal .tab-pane {
     padding: 1.5rem 0;
     margin-right: 0;
     margin-bottom: 0;

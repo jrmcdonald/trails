@@ -21,7 +21,7 @@ module.exports = function($scope, $uibModal) {
         $scope.exportFormat = format;
     }
 
-    $scope.openExport = function () {
+    $scope.openDownloadModal = function () {
         var modalInstance;
         var modalScope = $scope.$new();
 
@@ -50,10 +50,10 @@ module.exports = function($scope, $uibModal) {
         };      
 
         modalInstance = $uibModal.open({
-            template: '<export></export>',
+            template: '<download-modal></download-modal>',
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
-            windowClass: 'export-modal',
+            windowClass: 'download-modal',
             size: 'lg',
             scope: modalScope
         });

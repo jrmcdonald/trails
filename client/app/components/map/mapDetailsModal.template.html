@@ -1,0 +1,37 @@
+<div class="modal-header">
+  <button type="button" class="close" aria-label="Close" ng-click="close()"><span aria-hidden="true">&times;</span></button>
+  <h3 class="modal-title" id="modal-title">Map Details</h3>
+</div>
+<div class="modal-body" id="modal-body">
+  <div class="row">
+    <div class="col-md-6">
+      <h4>Load / Update Map</h4>
+      <form name="mapLoadForm">
+        <div class="form-group">
+          <label for="mapSelect">Choose Map:</label>
+            <select class="form-control" name="mapSelect" id="mapSelect" ng-model="model.selectedMap" ng-options="map.id as map.name for map in maps" required></select>
+        </div>
+        <div class="form-group">
+            <button class="btn btn-primary" ng-click="loadMap()" ng-disabled="mapLoadForm.$invalid" disabled>Load</button>
+            <button class="btn btn-default" ng-click="updateMap()" ng-disabled="mapLoadForm.$invalid" disabled>Update</button>
+        </div>
+      </form>
+      {{selectedMap}}
+    </div>
+    <div class="col-md-6">
+      <h4>Create New Map</h4>
+      <form name="mapCreateForm">
+        <div class="form-group">
+          <label for="mapName">Name (max 30 chars):</label>
+          <input type="text" class="form-control" name="mapName" id="mapName" ng-model="model.newMapName" maxlength="30" required>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary" ng-click="createMap()" ng-disabled="mapCreateForm.$invalid" disabled>Create</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-default" ng-click="close()">Close</button>
+</div>
