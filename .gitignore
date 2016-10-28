@@ -13,4 +13,5 @@
 node_modules
 coverage
 *.tgz
+.vscode
 *.xml

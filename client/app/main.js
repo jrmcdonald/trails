@@ -1,27 +1,28 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var angular = require('angular');
-var bootstrap = require('angular-ui-bootstrap');
-var nemLogging = require('angular-simple-logger');
-var leaflet = require('leaflet');
-var leafletDraw = require('leaflet-draw');
-var uiLeaflet = require('ui-leaflet');
-var uiLeafletDraw = require('ui-leaflet-draw');
+const angular = require('angular');
 
-var MapCtrl = require('./components/map/map.controller');
-var MapDetailsCtrl = require('./components/map/details.controller');
-var MapFilters = require('./components/map/map.filters');
-var MapDataService = require('./components/map/map.service');
-var MapDirectives = require('./components/map/map.directives');
+require('angular-ui-bootstrap');
+require('angular-simple-logger');
+require('leaflet');
+require('leaflet-draw');
+require('ui-leaflet');
+require('ui-leaflet-draw');
 
-var DownloadCtrl = require('./components/download/download.controller');
-var DownloadDirectives = require('./components/download/download.directives');
+const MapCtrl = require('./components/map/map.controller');
+const MapDetailsCtrl = require('./components/map/details.controller');
+const MapFilters = require('./components/map/map.filters');
+const MapDataService = require('./components/map/map.service');
+const MapDirectives = require('./components/map/map.directives');
 
-var NavDirectives = require('./components/common/nav/nav.directives');
+const DownloadCtrl = require('./components/download/download.controller');
+const DownloadDirectives = require('./components/download/download.directives');
+
+const NavDirectives = require('./components/common/nav/nav.directives');
 
 angular.module('trailsApp', ['nemLogging', 'ui-leaflet', 'ui.bootstrap']);
 
-angular.module('trailsApp').controller("MapCtrl", ['$scope', '$compile', 'leafletBoundsHelpers', 'leafletDrawEvents', MapCtrl]);
-angular.module('trailsApp').controller("MapDetailsCtrl", ['$scope', '$uibModal', 'leafletBoundsHelpers', 'mapDataService', 'orderByFilter', MapDetailsCtrl]);
+angular.module('trailsApp').controller('MapCtrl', ['$scope', '$compile', 'leafletBoundsHelpers', 'leafletDrawEvents', MapCtrl]);
+angular.module('trailsApp').controller('MapDetailsCtrl', ['$scope', '$uibModal', 'leafletBoundsHelpers', 'mapDataService', 'orderByFilter', MapDetailsCtrl]);
 angular.module('trailsApp').filter('beautifyFilter', MapFilters.beautifyFilter);
 angular.module('trailsApp').factory('mapDataService', MapDataService);
 angular.module('trailsApp').directive('trackDetailsPopup', MapDirectives.trackDetailsPopup);
@@ -31,467 +32,385 @@ angular.module('trailsApp').controller('DownloadCtrl', ['$scope', '$uibModal', D
 angular.module('trailsApp').directive('downloadModal', DownloadDirectives.downloadModal);
 
 angular.module('trailsApp').directive('navigation', NavDirectives.nav);
+
 },{"./components/common/nav/nav.directives":2,"./components/download/download.controller":4,"./components/download/download.directives":5,"./components/map/details.controller":6,"./components/map/map.controller":7,"./components/map/map.directives":8,"./components/map/map.filters":9,"./components/map/map.service":10,"angular":15,"angular-simple-logger":11,"angular-ui-bootstrap":13,"leaflet":21,"leaflet-draw":20,"ui-leaflet":27,"ui-leaflet-draw":26}],2:[function(require,module,exports){
-exports.nav = function() {
-    return {
-        restrict: 'E',
-        replace: true,
-        templateUrl: './app/components/common/nav/nav.template.html'
-    };
-}
+exports.nav = function nav() {
+  return {
+    restrict: 'E',
+    replace: true,
+    templateUrl: './app/components/common/nav/nav.template.html',
+  };
+};
+
 },{}],3:[function(require,module,exports){
-var togpx = require('togpx');
-var tokml = require('tokml');
-var vkbeautify = require('vkbeautify');
+const togpx = require('togpx');
+const tokml = require('tokml');
+const vkbeautify = require('vkbeautify');
 
 exports.dataTypes = {
-    json: {
-        ext: "json",
-        mime: "application/json",
-        output: function(input, beautify = false) {
-            var data = JSON.stringify(input.toGeoJSON());
-            return (beautify) ? vkbeautify.json(data) : data;
-        }
+  json: {
+    ext: 'json',
+    mime: 'application/json',
+    output(input, beautify = false) {
+      const data = JSON.stringify(input.toGeoJSON());
+      return (beautify) ? vkbeautify.json(data) : data;
     },
-    gpx: {
-        ext: "gpx",
-        mime: "application/gpx+xml",
-        output: function(input, beautify = false) {
-            var data = togpx(input.toGeoJSON());
-            return (beautify) ? vkbeautify.xml(data) : data;
-        }
+  },
+  gpx: {
+    ext: 'gpx',
+    mime: 'application/gpx+xml',
+    output(input, beautify = false) {
+      const data = togpx(input.toGeoJSON());
+      return (beautify) ? vkbeautify.xml(data) : data;
     },
-    kml: {
-        ext: "kml",
-        mime: "application/vnd.google-earth.kml+xml",
-        output: function(input, beautify = false) {
-            var data = tokml(input.toGeoJSON());
-            return (beautify) ? vkbeautify.xml(data) : data;
-        }
-    }
-}
+  },
+  kml: {
+    ext: 'kml',
+    mime: 'application/vnd.google-earth.kml+xml',
+    output(input, beautify = false) {
+      const data = tokml(input.toGeoJSON());
+      return (beautify) ? vkbeautify.xml(data) : data;
+    },
+  },
+};
+
 },{"togpx":24,"tokml":25,"vkbeautify":28}],4:[function(require,module,exports){
-var Utils = require('../common/utils/index');
+const Utils = require('../common/utils/index');
 
-module.exports = function($scope, $uibModal) {
-    $scope.dataTypes = Utils.dataTypes;
-    $scope.tabs = [
-        {
-            title: "GeoJSON",
-            format: "json"
-        },
-        {
-            title: "GPX",
-            format: "gpx"
-        },
-        {
-            title: "KML",
-            format: "kml"
-        }
-    ];
+module.exports = function DownloadCtrl($scope, $uibModal) {
+  $scope.dataTypes = Utils.dataTypes;
+  $scope.tabs = [
+    {
+      title: 'GeoJSON',
+      format: 'json',
+    },
+    {
+      title: 'GPX',
+      format: 'gpx',
+    },
+    {
+      title: 'KML',
+      format: 'kml',
+    },
+  ];
 
-    $scope.setExportFormat = function(format) {
-        $scope.exportFormat = format;
-    }
+  $scope.setExportFormat = function setExportFormat(format) {
+    $scope.exportFormat = format;
+  };
 
-    $scope.openDownloadModal = function () {
-        var modalInstance;
-        var modalScope = $scope.$new();
+  $scope.openDownloadModal = function openDownloadModal() {
+    let modalInstance;
+    const modalScope = $scope.$new();
 
-        modalScope.download = function () {
-            var format = $scope.exportFormat;
-            var data = $scope.dataTypes[format].output($scope.$parent.features);
-            var filename = "Route1." + $scope.dataTypes[format].ext;
-            var options = {
-                type: $scope.dataTypes[format].mime + ";charset=utf-8"
-            }
+    modalScope.download = function download() {
+      const format = $scope.exportFormat;
+      const data = $scope.dataTypes[format].output($scope.$parent.features);
+      const filename = `Route1.${$scope.dataTypes[format].ext}`;
+      const options = {
+        type: `${$scope.dataTypes[format].mime};charset=utf-8`,
+      };
 
-            // http://stackoverflow.com/a/20194533
-            var tempElem = window.document.createElement('a');
-            tempElem.href = window.URL.createObjectURL(new Blob([data], options));
-            tempElem.download = filename;
+      // http://stackoverflow.com/a/20194533
+      const tempElem = window.document.createElement('a');
+      tempElem.href = window.URL.createObjectURL(new Blob([data], options));
+      tempElem.download = filename;
 
-            document.body.appendChild(tempElem)
-            tempElem.click();
-            
-            // tidy up
-            document.body.removeChild(tempElem)
-        };
+      document.body.appendChild(tempElem);
+      tempElem.click();
 
-        modalScope.close = function () {
-            modalInstance.dismiss('cancel');
-        };      
-
-        modalInstance = $uibModal.open({
-            template: '<download-modal></download-modal>',
-            ariaLabelledBy: 'modal-title',
-            ariaDescribedBy: 'modal-body',
-            windowClass: 'download-modal',
-            size: 'lg',
-            scope: modalScope
-        });
+      // tidy up
+      document.body.removeChild(tempElem);
     };
-}
+
+    modalScope.close = function close() {
+      modalInstance.dismiss('cancel');
+    };
+
+    modalInstance = $uibModal.open({
+      template: '<download-modal></download-modal>',
+      ariaLabelledBy: 'modal-title',
+      ariaDescribedBy: 'modal-body',
+      windowClass: 'download-modal',
+      size: 'lg',
+      scope: modalScope,
+    });
+  };
+};
+
 },{"../common/utils/index":3}],5:[function(require,module,exports){
-exports.downloadModal = function() {
-    return {
-        restrict: 'E',
-        templateUrl: './app/components/download/downloadModal.template.html',
-    };
-}
+exports.downloadModal = function downloadModal() {
+  return {
+    restrict: 'E',
+    templateUrl: './app/components/download/downloadModal.template.html',
+  };
+};
+
 },{}],6:[function(require,module,exports){
-module.exports = function($scope, $uibModal, leafletBoundsHelpers, mapDataService, orderByFilter) {
-    $scope.openMapDetailsModal = function() {
-        var modalInstance;
-        var modalScope = $scope.$new();
+module.exports = function MapDetailsCtrl($scope, $uibModal, leafletBoundsHelpers, mapDataService, orderByFilter) {
+  $scope.openMapDetailsModal = function openMapDetailsModal() {
+    let modalInstance;
+    const modalScope = $scope.$new();
 
-        modalScope.model = {
-            selectedMap: null,
-            newMapName: null
-        }
-
-        mapDataService.getMaps('{ "fields": {"name": true, "id": true} }').then(function(data) {
-            modalScope.maps = orderByFilter(data, 'name');
-            if (typeof $scope.$parent.loadedMap !== 'undefined') {
-                modalScope.model.selectedMap = $scope.$parent.loadedMap.id;
-            } else {
-                modalScope.model.selectedMap = modalScope.maps[0].id;
-            }
-        });
-
-        modalScope.loadMap = function() {
-            mapDataService.getMap(modalScope.model.selectedMap).then(function(res) {
-                $scope.$parent.loadedMap = {
-                    id: res.id,
-                    name: res.name
-                };
-                
-                $scope.$parent.features.clearLayers();
-
-                L.geoJson(res.data, {
-                    style: {
-                        "color": "#F06EAA",
-                        "weight": 4,
-                        "opacity": 0.5
-                    },
-                    onEachFeature: function(feature, layer) {
-                        $scope.$parent.attachPopup(layer);
-                    }
-                });
-
-                var bounds = leafletBoundsHelpers.createBoundsFromLeaflet($scope.$parent.features.getBounds());
-                $scope.$parent.map.bounds = bounds;
-
-                modalScope.close();
-            }).catch(function(){
-                // TODO: Error handling.
-            });
-        };
-
-        modalScope.updateMap = function() {
-            var map = {
-                data: $scope.$parent.features.toGeoJSON()
-            };
-
-            mapDataService.updateMap(modalScope.model.selectedMap, map).then(function(res) {
-                modalScope.close();
-            }).catch(function(){
-                // TODO: Error handling.
-            });
-        };
-
-        modalScope.createMap = function() {
-            var map = {
-                name: modalScope.model.newMapName,
-                data: $scope.$parent.features.toGeoJSON()
-            };
-
-            mapDataService.createMap(map).then(function(res) {
-                $scope.$parent.loadedMap = {
-                    id: res.id,
-                    name: res.name
-                };
-
-                modalScope.close();
-            }).catch(function(){
-                // TODO: Error handling.
-            });
-        }
-
-        modalScope.close = function() {
-            modalInstance.dismiss('cancel');
-        };      
-
-        modalInstance = $uibModal.open({
-            template: '<map-details-modal></map-details-modal>',
-            ariaLabelledBy: 'modal-title',
-            ariaDescribedBy: 'modal-body',
-            windowClass: 'map-details-modal',
-            size: 'lg',
-            scope: modalScope
-        });
+    modalScope.model = {
+      selectedMap: null,
+      newMapName: null,
     };
-}
+
+    mapDataService.getMaps('{ "fields": {"name": true, "id": true} }').then((data) => {
+      modalScope.maps = orderByFilter(data, 'name');
+      if (typeof $scope.$parent.loadedMap !== 'undefined') {
+        modalScope.model.selectedMap = $scope.$parent.loadedMap.id;
+      } else {
+        modalScope.model.selectedMap = modalScope.maps[0].id;
+      }
+    });
+
+    modalScope.loadMap = function loadMap() {
+      mapDataService.getMap(modalScope.model.selectedMap).then((res) => {
+        $scope.$parent.loadedMap = {
+          id: res.id,
+          name: res.name,
+        };
+
+        $scope.$parent.features.clearLayers();
+
+        L.geoJson(res.data, {
+          style: {
+            color: '#F06EAA',
+            weight: 4,
+            opacity: 0.5,
+          },
+          onEachFeature(feature, layer) {
+            $scope.$parent.attachPopup(layer);
+          },
+        });
+
+        const featureBounds = $scope.$parent.features.getBounds();
+        const mapBounds = leafletBoundsHelpers.createBoundsFromLeaflet(featureBounds);
+        $scope.$parent.map.bounds = mapBounds;
+
+        modalScope.close();
+      }).catch(() => {
+        // TODO: Error handling.
+      });
+    };
+
+    modalScope.updateMap = function updateMap() {
+      const map = {
+        data: $scope.$parent.features.toGeoJSON(),
+      };
+
+      mapDataService.updateMap(modalScope.model.selectedMap, map).then(() => {
+        modalScope.close();
+      }).catch(() => {
+        // TODO: Error handling.
+      });
+    };
+
+    modalScope.createMap = function createMap() {
+      const map = {
+        name: modalScope.model.newMapName,
+        data: $scope.$parent.features.toGeoJSON(),
+      };
+
+      mapDataService.createMap(map).then((res) => {
+        $scope.$parent.loadedMap = {
+          id: res.id,
+          name: res.name,
+        };
+
+        modalScope.close();
+      }).catch(() => {
+        // TODO: Error handling.
+      });
+    };
+
+    modalScope.close = function close() {
+      modalInstance.dismiss('cancel');
+    };
+
+    modalInstance = $uibModal.open({
+      template: '<map-details-modal></map-details-modal>',
+      ariaLabelledBy: 'modal-title',
+      ariaDescribedBy: 'modal-body',
+      windowClass: 'map-details-modal',
+      size: 'lg',
+      scope: modalScope,
+    });
+  };
+};
+
 },{}],7:[function(require,module,exports){
-module.exports = function($scope, $compile, leafletBoundsHelpers, leafletDrawEvents) {
-    $scope.features = new L.FeatureGroup();
+module.exports = function MapCtrl($scope, $compile, leafletBoundsHelpers, leafletDrawEvents) {
+  $scope.features = new L.FeatureGroup();
 
-    var bounds = leafletBoundsHelpers.createBoundsFromArray([
+  const bounds = leafletBoundsHelpers.createBoundsFromArray([
         [53.0685, -4.0763],
-        [53.0685, -4.0763]
-    ]);
-    
-    // Set up ui-leaflet and ui-leaflet-draw options
-    angular.extend($scope, {
-        map: {
-            bounds: bounds,
-            center: {},
-            defaults: {
-                maxZoom: 18,
-                minZoom: 1,
-                closePopupOnClick: false,
-                tileLayer: 'https://api.mapbox.com/styles/v1/mapbox/outdoors-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoicXd5Y2siLCJhIjoiY2lzeXhqa3Z6MDA1MDJ6bzN2MXY2eHh0bSJ9.iAPf9IhnK6N7MrkIM_3pJA',
-                tileLayerOptions: {
-                    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>'
-                }
-            },
-            drawOptions: {
-                draw: {
-                    polygon: false,
-                    rectangle: false,
-                    circle: false,
-                    marker: false
-                },
-                edit: {
-                    featureGroup: $scope.features
-                } 
-            }
-        }
-    });
+        [53.0685, -4.0763],
+  ]);
 
-    // Handle leafletDrawEvents
-    var handle = {
-        created: function(e, leafletEvent, leafletObject, model, modelName) {
-            var layer = leafletEvent.layer;
-            
-            // Create & bind popup template to the newly created layer
-            $scope.attachPopup(layer);
-
-            // http://stackoverflow.com/a/35819611
-            var feature = layer.feature = layer.feature || {};
-            feature.type = "Feature";
-            feature.properties = feature.properties || {};
-            feature.properties.name = "Random" + Math.floor(Math.random() * 1000);
-
-            $scope.features.addLayer(layer);
+  // Set up ui-leaflet and ui-leaflet-draw options
+  angular.extend($scope, {
+    map: {
+      bounds,
+      center: {},
+      defaults: {
+        maxZoom: 18,
+        minZoom: 1,
+        closePopupOnClick: false,
+        tileLayer: 'https://api.mapbox.com/styles/v1/mapbox/outdoors-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoicXd5Y2siLCJhIjoiY2lzeXhqa3Z6MDA1MDJ6bzN2MXY2eHh0bSJ9.iAPf9IhnK6N7MrkIM_3pJA',
+        tileLayerOptions: {
+          attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
         },
-        edited: function(arg) {},
-        deleted: function(arg) {
-            var layers;
-            layers = arg.layers;
-            $scope.features.removeLayer(layer);
+      },
+      drawOptions: {
+        draw: {
+          polygon: false,
+          rectangle: false,
+          circle: false,
+          marker: false,
         },
-        drawstart: function(arg) {},
-        drawstop: function(arg) {},
-        editstart: function(arg) {},
-        editstop: function(arg) {},
-        deletestart: function(arg) {},
-        deletestop: function(arg) {}
-    };
+        edit: {
+          featureGroup: $scope.features,
+        },
+      },
+    },
+  });
 
-    var drawEvents = leafletDrawEvents.getAvailableEvents();
+  // Handle leafletDrawEvents
+  const handle = {
+    created(e, leafletEvent, leafletObject, model, modelName) {
+      const layer = leafletEvent.layer;
 
-    drawEvents.forEach(function(eventName){
-        $scope.$on('leafletDirectiveDraw.' + eventName, function(e, payload) {
-          var leafletEvent, leafletObject, model, modelName;
-          leafletEvent = payload.leafletEvent, leafletObject = payload.leafletObject, model = payload.model, modelName = payload.modelName;
+      // Create & bind popup template to the newly created layer
+      $scope.attachPopup(layer);
 
-          handle[eventName.replace('draw:','')](e, leafletEvent, leafletObject, model, modelName);
-        });
+      // http://stackoverflow.com/a/35819611
+      const feature = layer.feature = layer.feature || {};
+      feature.type = 'Feature';
+      feature.properties = feature.properties || {};
+      feature.properties.name = `Random${Math.floor(Math.random() * 1000)}`;
+
+      $scope.features.addLayer(layer);
+    },
+    edited() {},
+    deleted() {},
+    drawstart() {},
+    drawstop() {},
+    editstart() {},
+    editstop() {},
+    deletestart() {},
+    deletestop() {},
+  };
+
+  const drawEvents = leafletDrawEvents.getAvailableEvents();
+
+  drawEvents.forEach((eventName) => {
+    $scope.$on(`leafletDirectiveDraw.${eventName}`, (e, payload) => {
+      const leafletEvent = payload.leafletEvent;
+      const leafletObject = payload.leafletObject;
+      const model = payload.model;
+      const modelName = payload.modelName;
+
+      handle[eventName.replace('draw:', '')](e, leafletEvent, leafletObject, model, modelName);
     });
+  });
 
-    $scope.attachPopup = function(layer) {
-        var popupScope = $scope.$new(true);
-        popupScope.layer = layer;
-        var popupHtml = $compile('<track-details-popup></track-details-popup>')(popupScope)[0];
-        layer.bindPopup(popupHtml);
-        $scope.features.addLayer(layer);
-    }
+  $scope.attachPopup = function attachPopup(layer) {
+    const popupScope = $scope.$new(true);
+    popupScope.layer = layer;
+    const popupHtml = $compile('<track-details-popup></track-details-popup>')(popupScope)[0];
+    layer.bindPopup(popupHtml);
+    $scope.features.addLayer(layer);
+  };
+};
 
-    // $scope.openMapDetailsModal = function() {
-    //     var modalInstance;
-    //     var modalScope = $scope.$new();
-
-    //     modalScope.model = {
-    //         selectedMap: null,
-    //         newMapName: null
-    //     }
-
-    //     mapDataService.getMaps('{ "fields": {"name": true, "id": true} }').then(function(data) {
-    //         modalScope.maps = orderByFilter(data, 'name');
-    //         if (typeof $scope.loadedMap !== 'undefined') {
-    //             modalScope.model.selectedMap = $scope.loadedMap.id;
-    //         } else {
-    //             modalScope.model.selectedMap = modalScope.maps[0].id;
-    //         }
-    //     });
-
-    //     modalScope.loadMap = function() {
-    //         mapDataService.getMap(modalScope.model.selectedMap).then(function(res) {
-    //             $scope.loadedMap = {
-    //                 id: res.id,
-    //                 name: res.name
-    //             };
-                
-    //             $scope.features.clearLayers();
-
-    //             L.geoJson(res.data, {
-    //                 style: {
-    //                     "color": "#F06EAA",
-    //                     "weight": 4,
-    //                     "opacity": 0.5
-    //                 },
-    //                 onEachFeature: function(feature, layer) {
-    //                     attachPopup(layer);
-    //                 }
-    //             });
-
-    //             var bounds = leafletBoundsHelpers.createBoundsFromLeaflet($scope.features.getBounds());
-    //             $scope.map.bounds = bounds;
-
-    //             modalScope.close();
-    //         }).catch(function(){
-    //             // TODO: Error handling.
-    //         });
-    //     };
-
-    //     modalScope.updateMap = function() {
-    //         var map = {
-    //             data: $scope.features.toGeoJSON()
-    //         };
-
-    //         mapDataService.updateMap(modalScope.model.selectedMap, map).then(function(res) {
-    //             modalScope.close();
-    //         }).catch(function(){
-    //             // TODO: Error handling.
-    //         });
-    //     };
-
-    //     modalScope.createMap = function() {
-    //         var map = {
-    //             name: modalScope.model.newMapName,
-    //             data: $scope.features.toGeoJSON()
-    //         };
-
-    //         mapDataService.createMap(map).then(function(res) {
-    //             $scope.loadedMap = {
-    //                 id: res.id,
-    //                 name: res.name
-    //             };
-
-    //             modalScope.close();
-    //         }).catch(function(){
-    //             // TODO: Error handling.
-    //         });
-    //     }
-
-    //     modalScope.close = function() {
-    //         modalInstance.dismiss('cancel');
-    //     };      
-
-    //     modalInstance = $uibModal.open({
-    //         template: '<map-details-modal></map-details-modal>',
-    //         ariaLabelledBy: 'modal-title',
-    //         ariaDescribedBy: 'modal-body',
-    //         windowClass: 'map-details-modal',
-    //         size: 'lg',
-    //         scope: modalScope
-    //     });
-    // };
-}
 },{}],8:[function(require,module,exports){
-exports.trackDetailsPopup = function($compile, $templateRequest, $sce) {
-    return {
-        restrict: 'E',
-        replace: true,
-        link: function(scope, element, attrs) {
-            var templateUrl = $sce.getTrustedResourceUrl('./app/components/map/trackDetailsPopup.template.html');
+exports.trackDetailsPopup = function trackDetailsPopup($compile, $templateRequest, $sce) {
+  return {
+    restrict: 'E',
+    replace: true,
+    link(scope, element, attrs) {
+      const templateUrl = $sce.getTrustedResourceUrl('./app/components/map/trackDetailsPopup.template.html');
 
-            $templateRequest(templateUrl).then(function(template) {
-                var html = $compile(template)(scope);
-                element.append(html);
-            });
-        }
-    };
-}
+      $templateRequest(templateUrl).then((template) => {
+        const html = $compile(template)(scope);
+        element.append(html);
+      });
+    },
+  };
+};
 
-exports.mapDetailsModal = function($compile, $templateRequest, $sce) {
-    return {
-        restrict: 'E',
-        replace: true,
-        link: function(scope, element, attrs) {
-            var templateUrl = $sce.getTrustedResourceUrl('./app/components/map/mapDetailsModal.template.html');
+exports.mapDetailsModal = function mapDetailsModal($compile, $templateRequest, $sce) {
+  return {
+    restrict: 'E',
+    replace: true,
+    link(scope, element, attrs) {
+      const templateUrl = $sce.getTrustedResourceUrl('./app/components/map/mapDetailsModal.template.html');
 
-            $templateRequest(templateUrl).then(function(template) {
-                var html = $compile(template)(scope);
-                element.append(html);
-            });
-        }
-    };
-}
+      $templateRequest(templateUrl).then((template) => {
+        const html = $compile(template)(scope);
+        element.append(html);
+      });
+    },
+  };
+};
+
 },{}],9:[function(require,module,exports){
-var Utils = require('../common/utils/index');
+const Utils = require('../common/utils/index');
 
-exports.beautifyFilter = function() {
-    return function(input, format) {
-        return (input instanceof L.FeatureGroup) ? Utils.dataTypes[format].output(input, true) : '';
-    }
-}
+exports.beautifyFilter = function beautifyFilter() {
+  return function (input, format) {
+    return (input instanceof L.FeatureGroup) ? Utils.dataTypes[format].output(input, true) : '';
+  };
+};
+
 },{"../common/utils/index":3}],10:[function(require,module,exports){
-module.exports = function($http) {
-    var getMaps = function($filter = null) {
-        let $filterString = '';
-        
-        if ($filter !== null) {
-            $filterString = '?filter=' + encodeURIComponent($filter);
-        }
+module.exports = function MapDataService($http) {
+  const getMaps = function getMaps($filter = null) {
+    let $filterString = '';
 
-        return $http.get('http://trails.eu-gb.mybluemix.net/api/Maps' + $filterString).then(function(response) {
-            return response.data;
-        });
-    };
-
-    var getMap = function($id, $filter = null) {
-        let $filterString = '';
-        
-        if ($filter !== null) {
-            $filterString = '?filter=' + encodeURIComponent($filter);
-        }
-
-        return $http.get('http://trails.eu-gb.mybluemix.net/api/Maps/' + $id + $filterString).then(function(response) {
-            return response.data;
-        });
-    };
-
-    var updateMap = function($id, $data) {
-        return $http.put('http://trails.eu-gb.mybluemix.net/api/Maps/' + $id, $data).then(function(response) {
-            return response.data;
-        });
-    };
-
-    var createMap = function($data) {
-        return $http.post('http://trails.eu-gb.mybluemix.net/api/Maps', $data).then(function(response) {
-            return response.data;
-        });
+    if ($filter !== null) {
+      $filterString = `?filter=${encodeURIComponent($filter)}`;
     }
 
-    return {
-        getMaps: getMaps,
-        getMap: getMap,
-        updateMap: updateMap,
-        createMap: createMap
-    };
-}
+    return $http.get(`http://trails.eu-gb.mybluemix.net/api/Maps${$filterString}`).then((response) => {
+      return response.data;
+    });
+  };
+
+  const getMap = function getMap($id, $filter = null) {
+    let $filterString = '';
+
+    if ($filter !== null) {
+      $filterString = `?filter=${encodeURIComponent($filter)}`;
+    }
+
+    return $http.get(`http://trails.eu-gb.mybluemix.net/api/Maps/${$id}${$filterString}`).then((response) => {
+      return response.data;
+    });
+  };
+
+  const updateMap = function updateMap($id, $data) {
+    return $http.put(`http://trails.eu-gb.mybluemix.net/api/Maps/${$id}`, $data).then((response) => {
+      return response.data;
+    });
+  };
+
+  const createMap = function createMap($data) {
+    return $http.post('http://trails.eu-gb.mybluemix.net/api/Maps', $data).then((response) => {
+      return response.data;
+    });
+  };
+
+  return {
+    getMaps,
+    getMap,
+    updateMap,
+    createMap,
+  };
+};
+
 },{}],11:[function(require,module,exports){
 /**
  *  angular-simple-logger

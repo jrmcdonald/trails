@@ -1,26 +1,27 @@
-var angular = require('angular');
-var bootstrap = require('angular-ui-bootstrap');
-var nemLogging = require('angular-simple-logger');
-var leaflet = require('leaflet');
-var leafletDraw = require('leaflet-draw');
-var uiLeaflet = require('ui-leaflet');
-var uiLeafletDraw = require('ui-leaflet-draw');
+const angular = require('angular');
 
-var MapCtrl = require('./components/map/map.controller');
-var MapDetailsCtrl = require('./components/map/details.controller');
-var MapFilters = require('./components/map/map.filters');
-var MapDataService = require('./components/map/map.service');
-var MapDirectives = require('./components/map/map.directives');
+require('angular-ui-bootstrap');
+require('angular-simple-logger');
+require('leaflet');
+require('leaflet-draw');
+require('ui-leaflet');
+require('ui-leaflet-draw');
 
-var DownloadCtrl = require('./components/download/download.controller');
-var DownloadDirectives = require('./components/download/download.directives');
+const MapCtrl = require('./components/map/map.controller');
+const MapDetailsCtrl = require('./components/map/details.controller');
+const MapFilters = require('./components/map/map.filters');
+const MapDataService = require('./components/map/map.service');
+const MapDirectives = require('./components/map/map.directives');
 
-var NavDirectives = require('./components/common/nav/nav.directives');
+const DownloadCtrl = require('./components/download/download.controller');
+const DownloadDirectives = require('./components/download/download.directives');
+
+const NavDirectives = require('./components/common/nav/nav.directives');
 
 angular.module('trailsApp', ['nemLogging', 'ui-leaflet', 'ui.bootstrap']);
 
-angular.module('trailsApp').controller("MapCtrl", ['$scope', '$compile', 'leafletBoundsHelpers', 'leafletDrawEvents', MapCtrl]);
-angular.module('trailsApp').controller("MapDetailsCtrl", ['$scope', '$uibModal', 'leafletBoundsHelpers', 'mapDataService', 'orderByFilter', MapDetailsCtrl]);
+angular.module('trailsApp').controller('MapCtrl', ['$scope', '$compile', 'leafletBoundsHelpers', 'leafletDrawEvents', MapCtrl]);
+angular.module('trailsApp').controller('MapDetailsCtrl', ['$scope', '$uibModal', 'leafletBoundsHelpers', 'mapDataService', 'orderByFilter', MapDetailsCtrl]);
 angular.module('trailsApp').filter('beautifyFilter', MapFilters.beautifyFilter);
 angular.module('trailsApp').factory('mapDataService', MapDataService);
 angular.module('trailsApp').directive('trackDetailsPopup', MapDirectives.trackDetailsPopup);
