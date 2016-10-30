@@ -12,21 +12,28 @@
             <select class="form-control" name="mapSelect" id="mapSelect" ng-model="model.selectedMap" ng-options="map.id as map.name for map in maps" required></select>
         </div>
         <div class="form-group">
-            <button class="btn btn-primary" ng-click="loadMap()" ng-disabled="mapLoadForm.$invalid" disabled>Load</button>
-            <button class="btn btn-default" ng-click="updateMap()" ng-disabled="mapLoadForm.$invalid" disabled>Update</button>
+            <button class="btn btn-primary" ng-click="loadMap()" ng-disabled="state.creating || state.loading || state.updating">
+              <span ng-hide="state.loading">Load</span>
+              <i class="fa fa-spinner fa-pulse" ng-show="state.loading"></i>
+            </button>
+            <button class="btn btn-default" ng-click="updateMap()" ng-disabled="state.creating || state.loading || state.updating">
+              <span ng-hide="state.updating">Update</span>
+              <i class="fa fa-spinner fa-pulse" ng-show="state.updating"></i>
+            </button>
         </div>
       </form>
       {{selectedMap}}
     </div>
     <div class="col-md-6">
       <h4>Create New Map</h4>
-      <form name="mapCreateForm">
-        <div class="form-group">
+      <form name="mapCreateForm" ng-submit="mapCreateForm.$valid && createMap()" novalidate>
+        <div class="form-group" ng-class="{ 'has-error': mapCreateForm.mapName.$touched && mapCreateForm.mapName.$invalid }">
           <label for="mapName">Name (max 30 chars):</label>
-          <input type="text" class="form-control" name="mapName" id="mapName" ng-model="model.newMapName" maxlength="30" required>
+          <input type="text" class="form-control" name="mapName" id="mapName" ng-model="model.newMapName" ng-minlength="1" ng-maxlength="30" required>
+          <error-messages element="mapCreateForm.mapName"></error-messages>
         </div>
         <div class="form-group">
-            <button type="submit" class="btn btn-primary" ng-click="createMap()" ng-disabled="mapCreateForm.$invalid" disabled>Create</button>
+            <button type="submit" class="btn btn-primary" ng-disabled="state.creating || state.loading || state.updating">Create</button>
         </div>
       </form>
     </div>

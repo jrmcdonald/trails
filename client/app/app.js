@@ -1,5 +1,6 @@
 const angular = require('angular');
 
+require('angular-messages');
 require('angular-ui-bootstrap');
 require('angular-simple-logger');
 require('leaflet');
@@ -16,9 +17,10 @@ const MapDirectives = require('./components/map/map.directives');
 const DownloadCtrl = require('./components/download/download.controller');
 const DownloadDirectives = require('./components/download/download.directives');
 
+const FormDirectives = require('./components/common/forms/form.directives');
 const NavDirectives = require('./components/common/nav/nav.directives');
 
-angular.module('trailsApp', ['nemLogging', 'ui-leaflet', 'ui.bootstrap']);
+angular.module('trailsApp', ['nemLogging', 'ngMessages', 'ui-leaflet', 'ui.bootstrap']);
 
 angular.module('trailsApp').controller('MapCtrl', ['$scope', '$compile', 'leafletBoundsHelpers', 'leafletDrawEvents', MapCtrl]);
 angular.module('trailsApp').controller('MapDetailsCtrl', ['$scope', '$uibModal', 'leafletBoundsHelpers', 'mapDataService', 'orderByFilter', MapDetailsCtrl]);
@@ -30,4 +32,5 @@ angular.module('trailsApp').directive('mapDetailsModal', MapDirectives.mapDetail
 angular.module('trailsApp').controller('DownloadCtrl', ['$scope', '$uibModal', DownloadCtrl]);
 angular.module('trailsApp').directive('downloadModal', DownloadDirectives.downloadModal);
 
+angular.module('trailsApp').directive('errorMessages', FormDirectives.errorMessages);
 angular.module('trailsApp').directive('navigation', NavDirectives.nav);

@@ -8,6 +8,12 @@ module.exports = function MapDetailsCtrl($scope, $uibModal, leafletBoundsHelpers
       newMapName: null,
     };
 
+    modalScope.state = {
+      creating: false,
+      loading: false,
+      updating: false
+    };
+
     mapDataService.getMaps('{ "fields": {"name": true, "id": true} }').then((data) => {
       modalScope.maps = orderByFilter(data, 'name');
       if (typeof $scope.$parent.loadedMap !== 'undefined') {
@@ -18,6 +24,7 @@ module.exports = function MapDetailsCtrl($scope, $uibModal, leafletBoundsHelpers
     });
 
     modalScope.loadMap = function loadMap() {
+      modalScope.state.loading = true;
       mapDataService.getMap(modalScope.model.selectedMap).then((res) => {
         $scope.$parent.loadedMap = {
           id: res.id,
@@ -41,25 +48,31 @@ module.exports = function MapDetailsCtrl($scope, $uibModal, leafletBoundsHelpers
         const mapBounds = leafletBoundsHelpers.createBoundsFromLeaflet(featureBounds);
         $scope.$parent.map.bounds = mapBounds;
 
+        modalScope.state.loading = false;
         modalScope.close();
       }).catch(() => {
         // TODO: Error handling.
+        modalScope.state.loading = false;
       });
     };
 
     modalScope.updateMap = function updateMap() {
+      modalScope.state.updating = true;
       const map = {
         data: $scope.$parent.features.toGeoJSON(),
       };
 
       mapDataService.updateMap(modalScope.model.selectedMap, map).then(() => {
+        modalScope.state.updating = false;
         modalScope.close();
       }).catch(() => {
         // TODO: Error handling.
+        modalScope.state.updating = false;
       });
     };
 
     modalScope.createMap = function createMap() {
+      modalScope.state.creating = true;
       const map = {
         name: modalScope.model.newMapName,
         data: $scope.$parent.features.toGeoJSON(),
@@ -71,9 +84,11 @@ module.exports = function MapDetailsCtrl($scope, $uibModal, leafletBoundsHelpers
           name: res.name,
         };
 
+        modalScope.state.creating = false;
         modalScope.close();
       }).catch(() => {
         // TODO: Error handling.
+        modalScope.state.creating = true;
       });
     };
 
