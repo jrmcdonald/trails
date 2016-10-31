@@ -71,6 +71,10 @@ angular-messages:
   version "1.5.8"
   resolved "https://registry.yarnpkg.com/angular-messages/-/angular-messages-1.5.8.tgz#1f91d1e7f3f4f2e5ab5adefee2c9a7196b1a34cf"
 
+angular-sanitize:
+  version "1.5.8"
+  resolved "https://registry.yarnpkg.com/angular-sanitize/-/angular-sanitize-1.5.8.tgz#1832f69487ee820a21cbe30055a8fb1bdf297ab8"
+
 angular-simple-logger@^0.1.7, angular-simple-logger@~0.1.4, angular-simple-logger@0.1.x:
   version "0.1.7"
   resolved "https://registry.yarnpkg.com/angular-simple-logger/-/angular-simple-logger-0.1.7.tgz#4ae48e5eac0973f577845918e56d4933cf66f041"

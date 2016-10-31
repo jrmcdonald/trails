@@ -2,6 +2,7 @@ const angular = require('angular');
 
 require('angular-messages');
 require('angular-ui-bootstrap');
+require('angular-sanitize');
 require('angular-simple-logger');
 require('leaflet');
 require('leaflet-draw');
@@ -20,10 +21,10 @@ const DownloadDirectives = require('./components/download/download.directives');
 const FormDirectives = require('./components/common/forms/form.directives');
 const NavDirectives = require('./components/common/nav/nav.directives');
 
-angular.module('trailsApp', ['nemLogging', 'ngMessages', 'ui-leaflet', 'ui.bootstrap']);
+angular.module('trailsApp', ['nemLogging', 'ngMessages', 'ngSanitize', 'ui-leaflet', 'ui.bootstrap']);
 
 angular.module('trailsApp').controller('MapCtrl', ['$scope', '$compile', 'leafletBoundsHelpers', 'leafletDrawEvents', MapCtrl]);
-angular.module('trailsApp').controller('MapDetailsCtrl', ['$scope', '$uibModal', 'leafletBoundsHelpers', 'mapDataService', 'orderByFilter', MapDetailsCtrl]);
+angular.module('trailsApp').controller('MapDetailsCtrl', ['$scope', '$uibModal', '$sanitize', 'leafletBoundsHelpers', 'mapDataService', 'orderByFilter', MapDetailsCtrl]);
 angular.module('trailsApp').filter('beautifyFilter', MapFilters.beautifyFilter);
 angular.module('trailsApp').factory('mapDataService', MapDataService);
 angular.module('trailsApp').directive('trackDetailsPopup', MapDirectives.trackDetailsPopup);

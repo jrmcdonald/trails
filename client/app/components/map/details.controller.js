@@ -1,4 +1,4 @@
-module.exports = function MapDetailsCtrl($scope, $uibModal, leafletBoundsHelpers, mapDataService, orderByFilter) {
+module.exports = function MapDetailsCtrl($scope, $uibModal, $sanitize, leafletBoundsHelpers, mapDataService, orderByFilter) {
   $scope.openMapDetailsModal = function openMapDetailsModal() {
     let modalInstance;
     const modalScope = $scope.$new();
@@ -74,7 +74,7 @@ module.exports = function MapDetailsCtrl($scope, $uibModal, leafletBoundsHelpers
     modalScope.createMap = function createMap() {
       modalScope.state.creating = true;
       const map = {
-        name: modalScope.model.newMapName,
+        name: $sanitize(modalScope.model.newMapName),
         data: $scope.$parent.features.toGeoJSON(),
       };
 
