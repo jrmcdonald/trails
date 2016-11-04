@@ -62,3 +62,16 @@ pre {
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+.leaflet-popup-content {
+    width: 250px !important;
+}
+.track-details li {
+    line-height: 2em;
+}
+.track-details li input {
+    width: 140px !important;
+    height: 2em;
+}
+.track-details li button {
+    padding: 0;
+}

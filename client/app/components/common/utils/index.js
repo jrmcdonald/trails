@@ -2,6 +2,17 @@ const togpx = require('togpx');
 const tokml = require('tokml');
 const vkbeautify = require('vkbeautify');
 
+exports.getDistance = function getDistance(path) {
+  let distance = 0;
+  const latlngs = path.getLatLngs();
+
+  for (let i = 1; i < latlngs.length; i += 1) {
+    distance += latlngs[i].distanceTo(latlngs[i - 1]);
+  }
+
+  return distance;
+};
+
 exports.dataTypes = {
   json: {
     ext: 'json',

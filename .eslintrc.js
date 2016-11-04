@@ -8,6 +8,7 @@ module.exports = {
     ],
     "rules": {
         "no-param-reassign": "off",
-        "max-len": "off"
+        "max-len": "off",
+        "linebreak-style": "off"
     }
 };

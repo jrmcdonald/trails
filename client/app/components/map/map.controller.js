@@ -1,6 +1,9 @@
 module.exports = function MapCtrl($scope, $compile, leafletBoundsHelpers, leafletDrawEvents) {
   $scope.features = new L.FeatureGroup();
 
+  // TODO: Make this configurable
+  $scope.metric = true;
+
   const bounds = leafletBoundsHelpers.createBoundsFromArray([
         [53.0685, -4.0763],
         [53.0685, -4.0763],
@@ -22,6 +25,9 @@ module.exports = function MapCtrl($scope, $compile, leafletBoundsHelpers, leafle
       },
       drawOptions: {
         draw: {
+          polyline: {
+            metric: $scope.metric,
+          },
           polygon: false,
           rectangle: false,
           circle: false,
@@ -78,6 +84,5 @@ module.exports = function MapCtrl($scope, $compile, leafletBoundsHelpers, leafle
     popupScope.layer = layer;
     const popupHtml = $compile('<track-details-popup></track-details-popup>')(popupScope)[0];
     layer.bindPopup(popupHtml);
-    $scope.features.addLayer(layer);
   };
 };
