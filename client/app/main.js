@@ -323,6 +323,8 @@ exports.distanceFilter = function distanceFilter($filter) {
 
 },{"../common/utils/index":4}],10:[function(require,module,exports){
 module.exports = function MapDataService($http) {
+  const BASE_API_URL = 'https://trails.eu-gb.mybluemix.net/api/Maps';
+
   const getMaps = function getMaps($filter = null) {
     let $filterString = '';
 
@@ -330,7 +332,7 @@ module.exports = function MapDataService($http) {
       $filterString = `?filter=${encodeURIComponent($filter)}`;
     }
 
-    return $http.get(`http://trails.eu-gb.mybluemix.net/api/Maps${$filterString}`).then((response) => {
+    return $http.get(`${BASE_API_URL}${$filterString}`).then((response) => {
       return response.data;
     });
   };
@@ -342,19 +344,19 @@ module.exports = function MapDataService($http) {
       $filterString = `?filter=${encodeURIComponent($filter)}`;
     }
 
-    return $http.get(`http://trails.eu-gb.mybluemix.net/api/Maps/${$id}${$filterString}`).then((response) => {
+    return $http.get(`${BASE_API_URL}/${$id}${$filterString}`).then((response) => {
       return response.data;
     });
   };
 
   const updateMap = function updateMap($id, $data) {
-    return $http.put(`http://trails.eu-gb.mybluemix.net/api/Maps/${$id}`, $data).then((response) => {
+    return $http.put(`${BASE_API_URL}/${$id}`, $data).then((response) => {
       return response.data;
     });
   };
 
   const createMap = function createMap($data) {
-    return $http.post('http://trails.eu-gb.mybluemix.net/api/Maps', $data).then((response) => {
+    return $http.post(`${BASE_API_URL}`, $data).then((response) => {
       return response.data;
     });
   };
