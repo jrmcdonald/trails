@@ -413,6 +413,7 @@ module.exports = function MapDetailsCtrl($scope, $uibModal, $sanitize, leafletBo
           },
           onEachFeature(feature, layer) {
             $scope.$parent.attachPopup(layer);
+            $scope.$parent.features.addLayer(layer);
           },
         });
 
