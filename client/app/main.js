@@ -412,21 +412,23 @@ module.exports = function MapDetailsCtrl($scope, $exceptionHandler, $uibModal, $
 
         $scope.$parent.features.clearLayers();
 
-        L.geoJson(res.data, {
-          style: {
-            color: '#F06EAA',
-            weight: 4,
-            opacity: 0.5,
-          },
-          onEachFeature(feature, layer) {
-            $scope.$parent.attachPopup(layer);
-            $scope.$parent.features.addLayer(layer);
-          },
-        });
+        if (res.data.features.length > 0) {
+          L.geoJson(res.data, {
+            style: {
+              color: '#F06EAA',
+              weight: 4,
+              opacity: 0.5,
+            },
+            onEachFeature(feature, layer) {
+              $scope.$parent.attachPopup(layer);
+              $scope.$parent.features.addLayer(layer);
+            },
+          });
 
-        const featureBounds = $scope.$parent.features.getBounds();
-        const mapBounds = leafletBoundsHelpers.createBoundsFromLeaflet(featureBounds);
-        $scope.$parent.map.bounds = mapBounds;
+          const featureBounds = $scope.$parent.features.getBounds();
+          const mapBounds = leafletBoundsHelpers.createBoundsFromLeaflet(featureBounds);
+          $scope.$parent.map.bounds = mapBounds;
+        }
 
         modalScope.state.loading = false;
         modalScope.close();
