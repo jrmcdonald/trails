@@ -1,4 +1,8 @@
-module.exports = function MapDetailsCtrl($scope, $uibModal, $sanitize, leafletBoundsHelpers, mapDataService, orderByFilter) {
+module.exports = function MapDetailsCtrl($scope, $exceptionHandler, $uibModal, $sanitize, leafletBoundsHelpers, mapDataService, orderByFilter) {
+  function logResponseException(response) {
+    $exceptionHandler(new Error(`An unexpected API error occurred: ${response.config.method} ${response.config.url} ${response.status}`));
+  }
+
   $scope.openMapDetailsModal = function openMapDetailsModal() {
     let modalInstance;
     const modalScope = $scope.$new();
@@ -9,9 +13,10 @@ module.exports = function MapDetailsCtrl($scope, $uibModal, $sanitize, leafletBo
     };
 
     modalScope.state = {
+      error: false,
       creating: false,
       loading: false,
-      updating: false
+      updating: false,
     };
 
     mapDataService.getMaps('{ "fields": {"name": true, "id": true} }').then((data) => {
@@ -24,7 +29,9 @@ module.exports = function MapDetailsCtrl($scope, $uibModal, $sanitize, leafletBo
     });
 
     modalScope.loadMap = function loadMap() {
+      modalScope.resetError();
       modalScope.state.loading = true;
+
       mapDataService.getMap(modalScope.model.selectedMap).then((res) => {
         $scope.$parent.loadedMap = {
           id: res.id,
@@ -51,14 +58,17 @@ module.exports = function MapDetailsCtrl($scope, $uibModal, $sanitize, leafletBo
 
         modalScope.state.loading = false;
         modalScope.close();
-      }).catch(() => {
-        // TODO: Error handling.
+      }).catch((res) => {
+        logResponseException(res);
+        modalScope.state.error = true;
         modalScope.state.loading = false;
       });
     };
 
     modalScope.updateMap = function updateMap() {
+      modalScope.resetError();
       modalScope.state.updating = true;
+
       const map = {
         data: $scope.$parent.features.toGeoJSON(),
       };
@@ -66,14 +76,17 @@ module.exports = function MapDetailsCtrl($scope, $uibModal, $sanitize, leafletBo
       mapDataService.updateMap(modalScope.model.selectedMap, map).then(() => {
         modalScope.state.updating = false;
         modalScope.close();
-      }).catch(() => {
-        // TODO: Error handling.
+      }).catch((res) => {
+        logResponseException(res);
+        modalScope.state.error = true;
         modalScope.state.updating = false;
       });
     };
 
     modalScope.createMap = function createMap() {
+      modalScope.resetError();
       modalScope.state.creating = true;
+
       const map = {
         name: $sanitize(modalScope.model.newMapName),
         data: $scope.$parent.features.toGeoJSON(),
@@ -87,14 +100,19 @@ module.exports = function MapDetailsCtrl($scope, $uibModal, $sanitize, leafletBo
 
         modalScope.state.creating = false;
         modalScope.close();
-      }).catch(() => {
-        // TODO: Error handling.
-        modalScope.state.creating = true;
+      }).catch((res) => {
+        logResponseException(res);
+        modalScope.state.error = true;
+        modalScope.state.creating = false;
       });
     };
 
     modalScope.close = function close() {
       modalInstance.dismiss('cancel');
+    };
+
+    modalScope.resetError = function resetError() {
+      modalScope.state.error = false;
     };
 
     modalInstance = $uibModal.open({

@@ -25,7 +25,7 @@ const NavDirectives = require('./components/common/nav/nav.directives');
 angular.module('trailsApp', ['nemLogging', 'ngMessages', 'ngSanitize', 'ui-leaflet', 'ui.bootstrap']);
 
 angular.module('trailsApp').controller('MapCtrl', ['$scope', '$compile', 'leafletBoundsHelpers', 'leafletDrawEvents', MapCtrl]);
-angular.module('trailsApp').controller('MapDetailsCtrl', ['$scope', '$uibModal', '$sanitize', 'leafletBoundsHelpers', 'mapDataService', 'orderByFilter', MapDetailsCtrl]);
+angular.module('trailsApp').controller('MapDetailsCtrl', ['$scope', '$exceptionHandler', '$uibModal', '$sanitize', 'leafletBoundsHelpers', 'mapDataService', 'orderByFilter', MapDetailsCtrl]);
 angular.module('trailsApp').controller('TrackDetailsCtrl', ['$scope', TrackDetailsCtrl]);
 angular.module('trailsApp').filter('beautifyFilter', MapFilters.beautifyFilter);
 angular.module('trailsApp').filter('distanceFilter', MapFilters.distanceFilter);

@@ -44,7 +44,7 @@ Simple trail mapping application created using Angular, Leaflet.js, LoopBack & B
 
 ## Todo
 
-- [ ] Error handling for service calls.
+- [x] Error handling for service calls.
 - [ ] Delete saved maps.
 - [ ] Passport authentication for API.
 - [ ] Elevation data using Bing Elevation API.
