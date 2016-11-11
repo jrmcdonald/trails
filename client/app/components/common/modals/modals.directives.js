@@ -1,10 +1,9 @@
-exports.trackDetailsPopup = function trackDetailsPopup($compile, $templateRequest, $sce) {
+exports.mapDetailsModal = function mapDetailsModal($compile, $templateRequest, $sce) {
   return {
     restrict: 'E',
     replace: true,
-    controller: 'TrackDetailsCtrl',
     link(scope, element, attrs) {
-      const templateUrl = $sce.getTrustedResourceUrl('./app/components/map/trackDetailsPopup.template.html');
+      const templateUrl = $sce.getTrustedResourceUrl('./app/components/mapDetails/mapDetailsModal.template.html');
 
       $templateRequest(templateUrl).then((template) => {
         const html = $compile(template)(scope);
