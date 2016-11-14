@@ -11,14 +11,14 @@ require('ui-leaflet-draw');
 
 const MapCtrl = require('./components/map/map.controller');
 const MapDataService = require('./components/map/map.service');
-const MapDirectives = require('./components/map/map.directives');
 const MapFilters = require('./components/map/map.filters');
 
 const MapDetailsCtrl = require('./components/mapDetails/mapDetails.controller');
 const MapDetailsDirectives = require('./components/mapDetails/mapDetails.directives');
 const MapDetailsModalCtrl = require('./components/mapDetails/mapDetailsModal.controller');
 
-const TrackDetailsCtrl = require('./components/map/trackDetails.controller');
+const TrackDetailsCtrl = require('./components/trackDetails/trackDetails.controller');
+const TrackDetailsDirectives = require('./components/trackDetails/trackDetails.directives');
 
 const DownloadCtrl = require('./components/download/download.controller');
 const DownloadDirectives = require('./components/download/download.directives');
@@ -39,7 +39,7 @@ angular.module('trailsApp').directive('mapDetailsModal', MapDetailsDirectives.ma
 angular.module('trailsApp').controller('MapDetailsModalCtrl', ['$scope', '$uibModal', MapDetailsModalCtrl]);
 
 angular.module('trailsApp').controller('TrackDetailsCtrl', ['$scope', TrackDetailsCtrl]);
-angular.module('trailsApp').directive('trackDetailsPopup', MapDirectives.trackDetailsPopup);
+angular.module('trailsApp').directive('trackDetailsPopup', TrackDetailsDirectives.trackDetailsPopup);
 
 angular.module('trailsApp').controller('DownloadCtrl', ['$scope', DownloadCtrl]);
 angular.module('trailsApp').directive('downloadModal', DownloadDirectives.downloadModal);

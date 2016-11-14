@@ -12,14 +12,14 @@ require('ui-leaflet-draw');
 
 const MapCtrl = require('./components/map/map.controller');
 const MapDataService = require('./components/map/map.service');
-const MapDirectives = require('./components/map/map.directives');
 const MapFilters = require('./components/map/map.filters');
 
 const MapDetailsCtrl = require('./components/mapDetails/mapDetails.controller');
 const MapDetailsDirectives = require('./components/mapDetails/mapDetails.directives');
 const MapDetailsModalCtrl = require('./components/mapDetails/mapDetailsModal.controller');
 
-const TrackDetailsCtrl = require('./components/map/trackDetails.controller');
+const TrackDetailsCtrl = require('./components/trackDetails/trackDetails.controller');
+const TrackDetailsDirectives = require('./components/trackDetails/trackDetails.directives');
 
 const DownloadCtrl = require('./components/download/download.controller');
 const DownloadDirectives = require('./components/download/download.directives');
@@ -40,7 +40,7 @@ angular.module('trailsApp').directive('mapDetailsModal', MapDetailsDirectives.ma
 angular.module('trailsApp').controller('MapDetailsModalCtrl', ['$scope', '$uibModal', MapDetailsModalCtrl]);
 
 angular.module('trailsApp').controller('TrackDetailsCtrl', ['$scope', TrackDetailsCtrl]);
-angular.module('trailsApp').directive('trackDetailsPopup', MapDirectives.trackDetailsPopup);
+angular.module('trailsApp').directive('trackDetailsPopup', TrackDetailsDirectives.trackDetailsPopup);
 
 angular.module('trailsApp').controller('DownloadCtrl', ['$scope', DownloadCtrl]);
 angular.module('trailsApp').directive('downloadModal', DownloadDirectives.downloadModal);
@@ -49,7 +49,7 @@ angular.module('trailsApp').controller('DownloadModalCtrl', ['$scope', '$uibModa
 angular.module('trailsApp').directive('errorMessages', FormDirectives.errorMessages);
 angular.module('trailsApp').directive('navigation', NavDirectives.nav);
 
-},{"./components/common/forms/form.directives":2,"./components/common/nav/nav.directives":3,"./components/download/download.controller":5,"./components/download/download.directives":6,"./components/download/downloadModal.controller":7,"./components/map/map.controller":11,"./components/map/map.directives":12,"./components/map/map.filters":13,"./components/map/map.service":14,"./components/map/trackDetails.controller":15,"./components/mapDetails/mapDetails.controller":8,"./components/mapDetails/mapDetails.directives":9,"./components/mapDetails/mapDetailsModal.controller":10,"angular":24,"angular-messages":17,"angular-sanitize":19,"angular-simple-logger":20,"angular-ui-bootstrap":22,"leaflet":30,"leaflet-draw":29,"ui-leaflet":36,"ui-leaflet-draw":35}],2:[function(require,module,exports){
+},{"./components/common/forms/form.directives":2,"./components/common/nav/nav.directives":3,"./components/download/download.controller":5,"./components/download/download.directives":6,"./components/download/downloadModal.controller":7,"./components/map/map.controller":11,"./components/map/map.filters":12,"./components/map/map.service":13,"./components/mapDetails/mapDetails.controller":8,"./components/mapDetails/mapDetails.directives":9,"./components/mapDetails/mapDetailsModal.controller":10,"./components/trackDetails/trackDetails.controller":14,"./components/trackDetails/trackDetails.directives":15,"angular":24,"angular-messages":17,"angular-sanitize":19,"angular-simple-logger":20,"angular-ui-bootstrap":22,"leaflet":30,"leaflet-draw":29,"ui-leaflet":36,"ui-leaflet-draw":35}],2:[function(require,module,exports){
 exports.errorMessages = function errorMessages() {
   return {
     restrict: 'E',
@@ -473,23 +473,6 @@ module.exports = function MapCtrl($scope, $compile, leafletBoundsHelpers, leafle
 };
 
 },{}],12:[function(require,module,exports){
-exports.trackDetailsPopup = function trackDetailsPopup($compile, $templateRequest, $sce) {
-  return {
-    restrict: 'E',
-    replace: true,
-    controller: 'TrackDetailsCtrl',
-    link(scope, element, attrs) {
-      const templateUrl = $sce.getTrustedResourceUrl('./app/components/map/trackDetailsPopup.template.html');
-
-      $templateRequest(templateUrl).then((template) => {
-        const html = $compile(template)(scope);
-        element.append(html);
-      });
-    },
-  };
-};
-
-},{}],13:[function(require,module,exports){
 const Utils = require('../common/utils/index');
 
 exports.beautifyFilter = function beautifyFilter() {
@@ -514,7 +497,7 @@ exports.distanceFilter = function distanceFilter($filter) {
   };
 };
 
-},{"../common/utils/index":4}],14:[function(require,module,exports){
+},{"../common/utils/index":4}],13:[function(require,module,exports){
 module.exports = function MapDataService($http) {
   const BASE_API_URL = 'https://trails.eu-gb.mybluemix.net/api/Maps';
 
@@ -559,7 +542,7 @@ module.exports = function MapDataService($http) {
   };
 };
 
-},{}],15:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 const Utils = require('../common/utils/index');
 
 module.exports = function TrackDetailsCtrl($scope) {
@@ -583,7 +566,24 @@ module.exports = function TrackDetailsCtrl($scope) {
   };
 };
 
-},{"../common/utils/index":4}],16:[function(require,module,exports){
+},{"../common/utils/index":4}],15:[function(require,module,exports){
+exports.trackDetailsPopup = function trackDetailsPopup($compile, $templateRequest, $sce) {
+  return {
+    restrict: 'E',
+    replace: true,
+    controller: 'TrackDetailsCtrl',
+    link(scope, element, attrs) {
+      const templateUrl = $sce.getTrustedResourceUrl('./app/components/trackDetails/trackDetailsPopup.template.html');
+
+      $templateRequest(templateUrl).then((template) => {
+        const html = $compile(template)(scope);
+        element.append(html);
+      });
+    },
+  };
+};
+
+},{}],16:[function(require,module,exports){
 /**
  * @license AngularJS v1.5.8
  * (c) 2010-2016 Google, Inc. http://angularjs.org
