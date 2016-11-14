@@ -116,6 +116,8 @@ exports.dataTypes = {
 const Utils = require('../common/utils/index');
 
 module.exports = function DownloadCtrl($scope) {
+  const $grandParentScope = $scope.$parent.$parent;
+
   $scope.dataTypes = Utils.dataTypes;
   $scope.tabs = [
     {
@@ -139,7 +141,7 @@ module.exports = function DownloadCtrl($scope) {
   $scope.openDownloadModal = function openDownloadModal() {
     $scope.download = function download() {
       const format = $scope.exportFormat;
-      const data = $scope.dataTypes[format].output($scope.$parent.$parent.features);
+      const data = $scope.dataTypes[format].output($grandParentScope.features);
       const filename = `Route1.${$scope.dataTypes[format].ext}`;
       const options = {
         type: `${$scope.dataTypes[format].mime};charset=utf-8`,
@@ -189,6 +191,8 @@ module.exports = function DownloadModalCtrl($scope, $uibModal) {
 
 },{}],8:[function(require,module,exports){
 module.exports = function MapDetailsCtrl($scope, $exceptionHandler, $sanitize, leafletBoundsHelpers, mapDataService, orderByFilter) {
+  const $grandParentScope = $scope.$parent.$parent;
+
   $scope.model = {
     selectedMap: null,
     newMapName: null,
@@ -210,8 +214,8 @@ module.exports = function MapDetailsCtrl($scope, $exceptionHandler, $sanitize, l
   const loadMaps = function loadMaps() {
     mapDataService.getMaps('{ "fields": {"name": true, "id": true} }').then((data) => {
       $scope.maps = orderByFilter(data, 'name');
-      if (typeof $scope.$parent.$parent.loadedMap !== 'undefined' && $scope.$parent.$parent.loadedMap !== null) {
-        $scope.model.selectedMap = $scope.$parent.$parent.loadedMap.id;
+      if (typeof $grandParentScope.loadedMap !== 'undefined' && $grandParentScope.loadedMap !== null) {
+        $scope.model.selectedMap = $grandParentScope.loadedMap.id;
       } else {
         $scope.model.selectedMap = $scope.maps[0].id;
       }
@@ -227,12 +231,12 @@ module.exports = function MapDetailsCtrl($scope, $exceptionHandler, $sanitize, l
     $scope.state.loading = true;
 
     mapDataService.getMap($scope.model.selectedMap).then((res) => {
-      $scope.$parent.$parent.loadedMap = {
+      $grandParentScope.loadedMap = {
         id: res.id,
         name: res.name,
       };
 
-      $scope.$parent.$parent.features.clearLayers();
+      $grandParentScope.features.clearLayers();
 
       if (res.data.features.length > 0) {
         L.geoJson(res.data, {
@@ -242,14 +246,14 @@ module.exports = function MapDetailsCtrl($scope, $exceptionHandler, $sanitize, l
             opacity: 0.5,
           },
           onEachFeature(feature, layer) {
-            $scope.$parent.$parent.attachPopup(layer);
-            $scope.$parent.$parent.features.addLayer(layer);
+            $grandParentScope.attachPopup(layer);
+            $grandParentScope.features.addLayer(layer);
           },
         });
 
-        const featureBounds = $scope.$parent.$parent.features.getBounds();
+        const featureBounds = $grandParentScope.features.getBounds();
         const mapBounds = leafletBoundsHelpers.createBoundsFromLeaflet(featureBounds);
-        $scope.$parent.$parent.map.bounds = mapBounds;
+        $grandParentScope.map.bounds = mapBounds;
       }
 
       loadMaps();
@@ -269,7 +273,7 @@ module.exports = function MapDetailsCtrl($scope, $exceptionHandler, $sanitize, l
     $scope.state.updating = true;
 
     const map = {
-      data: $scope.$parent.$parent.features.toGeoJSON(),
+      data: $grandParentScope.features.toGeoJSON(),
     };
 
     mapDataService.updateMap($scope.model.selectedMap, map).then(() => {
@@ -289,12 +293,12 @@ module.exports = function MapDetailsCtrl($scope, $exceptionHandler, $sanitize, l
     $scope.clearAlerts();
     $scope.deleting = true;
 
-    $scope.$parent.$parent.loadedMap = null;
+    $grandParentScope.loadedMap = null;
 
     mapDataService.deleteMap($scope.model.selectedMap).then(() => {
       loadMaps();
 
-      $scope.$parent.$parent.features.clearLayers();
+      $grandParentScope.features.clearLayers();
 
       $scope.alerts.push({ type: 'success', msg: 'Map deleted successfully.' });
       $scope.state.deleting = false;
@@ -312,11 +316,11 @@ module.exports = function MapDetailsCtrl($scope, $exceptionHandler, $sanitize, l
 
     const map = {
       name: $sanitize($scope.model.newMapName),
-      data: $scope.$parent.$parent.features.toGeoJSON(),
+      data: $grandParentScope.features.toGeoJSON(),
     };
 
     mapDataService.createMap(map).then((res) => {
-      $scope.$parent.$parent.loadedMap = {
+      $grandParentScope.loadedMap = {
         id: res.id,
         name: res.name,
       };

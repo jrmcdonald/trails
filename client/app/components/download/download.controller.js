@@ -1,6 +1,8 @@
 const Utils = require('../common/utils/index');
 
 module.exports = function DownloadCtrl($scope) {
+  const $grandParentScope = $scope.$parent.$parent;
+
   $scope.dataTypes = Utils.dataTypes;
   $scope.tabs = [
     {
@@ -24,7 +26,7 @@ module.exports = function DownloadCtrl($scope) {
   $scope.openDownloadModal = function openDownloadModal() {
     $scope.download = function download() {
       const format = $scope.exportFormat;
-      const data = $scope.dataTypes[format].output($scope.$parent.$parent.features);
+      const data = $scope.dataTypes[format].output($grandParentScope.features);
       const filename = `Route1.${$scope.dataTypes[format].ext}`;
       const options = {
         type: `${$scope.dataTypes[format].mime};charset=utf-8`,
