@@ -45,11 +45,11 @@ Simple trail mapping application created using Angular, Leaflet.js, LoopBack & B
 ## Todo
 
 - [x] Error handling for service calls.
-- [ ] Delete saved maps.
+- [x] Delete saved maps.
 - [ ] Passport authentication for API.
 - [ ] Elevation data using Bing Elevation API.
 - [ ] Import data from GeoJSON, GPX or KML files.
-- [ ] Search for map destinations.
+- [x] Search for map destinations.
 
 ## Notes
 
