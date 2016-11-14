@@ -1,12 +1,12 @@
-module.exports = function ModalCtrl($scope, $uibModal) {
-  $scope.openMapDetailsModal = function openMapDetailsModal() {
+module.exports = function DownloadModalCtrl($scope, $uibModal) {
+  $scope.openDownloadModal = function openDownloadModal() {
     let modalInstance;
 
     modalInstance = $uibModal.open({
-      template: '<map-details-modal ng-controller="MapDetailsCtrl"></map-details-modal>',
+      template: '<download-modal ng-controller="DownloadCtrl"></download-modal>',
       ariaLabelledBy: 'modal-title',
       ariaDescribedBy: 'modal-body',
-      windowClass: 'map-details-modal',
+      windowClass: 'download-modal',
       size: 'lg',
       scope: $scope,
     });

@@ -1,6 +1,6 @@
 const Utils = require('../common/utils/index');
 
-module.exports = function DownloadCtrl($scope, $uibModal) {
+module.exports = function DownloadCtrl($scope) {
   $scope.dataTypes = Utils.dataTypes;
   $scope.tabs = [
     {
@@ -22,12 +22,9 @@ module.exports = function DownloadCtrl($scope, $uibModal) {
   };
 
   $scope.openDownloadModal = function openDownloadModal() {
-    let modalInstance;
-    const modalScope = $scope.$new();
-
-    modalScope.download = function download() {
+    $scope.download = function download() {
       const format = $scope.exportFormat;
-      const data = $scope.dataTypes[format].output($scope.$parent.features);
+      const data = $scope.dataTypes[format].output($scope.$parent.$parent.features);
       const filename = `Route1.${$scope.dataTypes[format].ext}`;
       const options = {
         type: `${$scope.dataTypes[format].mime};charset=utf-8`,
@@ -44,18 +41,5 @@ module.exports = function DownloadCtrl($scope, $uibModal) {
       // tidy up
       document.body.removeChild(tempElem);
     };
-
-    modalScope.close = function close() {
-      modalInstance.dismiss('cancel');
-    };
-
-    modalInstance = $uibModal.open({
-      template: '<download-modal></download-modal>',
-      ariaLabelledBy: 'modal-title',
-      ariaDescribedBy: 'modal-body',
-      windowClass: 'download-modal',
-      size: 'lg',
-      scope: modalScope,
-    });
   };
 };
