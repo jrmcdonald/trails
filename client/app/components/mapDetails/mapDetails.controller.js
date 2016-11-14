@@ -104,6 +104,8 @@ module.exports = function MapDetailsCtrl($scope, $exceptionHandler, $sanitize, l
     mapDataService.deleteMap($scope.model.selectedMap).then(() => {
       loadMaps();
 
+      $scope.$parent.$parent.features.clearLayers();
+
       $scope.alerts.push({ type: 'success', msg: 'Map deleted successfully.' });
       $scope.state.deleting = false;
     }).catch((res) => {
