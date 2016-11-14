@@ -1,4 +1,4 @@
-module.exports = function MapCtrl($scope, $compile, leafletBoundsHelpers, leafletDrawEvents) {
+module.exports = function MapCtrl($scope, $compile, leafletBoundsHelpers, leafletData, leafletDrawEvents) {
   $scope.features = new L.FeatureGroup();
 
   // TODO: Make this configurable
@@ -77,6 +77,28 @@ module.exports = function MapCtrl($scope, $compile, leafletBoundsHelpers, leafle
 
       handle[eventName.replace('draw:', '')](e, leafletEvent, leafletObject, model, modelName);
     });
+  });
+
+  leafletData.getMap().then((map) => {
+    const options = {
+      position: 'topleft',
+      defaultMarkGeocode: false,
+    };
+
+    const geocoder = new L.Control.Geocoder(options);
+
+    geocoder.on('markgeocode', (e) => {
+      const bbox = e.geocode.bbox;
+      const poly = L.polygon([
+        bbox.getSouthEast(),
+        bbox.getNorthEast(),
+        bbox.getNorthWest(),
+        bbox.getSouthWest(),
+      ]);
+      map.fitBounds(poly.getBounds());
+    });
+
+    geocoder.addTo(map);
   });
 
   $scope.attachPopup = function attachPopup(layer) {

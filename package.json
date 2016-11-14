@@ -16,6 +16,7 @@
     "compression": "^1.0.3",
     "cors": "^2.5.2",
     "leaflet": "^1.0.1",
+    "leaflet-control-geocoder": "^1.5.4",
     "leaflet-draw": "^0.4.0",
     "loopback": "^2.22.0",
     "loopback-boot": "^2.6.5",

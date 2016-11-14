@@ -5,6 +5,7 @@ require('angular-ui-bootstrap');
 require('angular-sanitize');
 require('angular-simple-logger');
 require('leaflet');
+require('leaflet-control-geocoder');
 require('leaflet-draw');
 require('ui-leaflet');
 require('ui-leaflet-draw');
@@ -29,7 +30,7 @@ const NavDirectives = require('./components/common/nav/nav.directives');
 
 angular.module('trailsApp', ['nemLogging', 'ngMessages', 'ngSanitize', 'ui-leaflet', 'ui.bootstrap']);
 
-angular.module('trailsApp').controller('MapCtrl', ['$scope', '$compile', 'leafletBoundsHelpers', 'leafletDrawEvents', MapCtrl]);
+angular.module('trailsApp').controller('MapCtrl', ['$scope', '$compile', 'leafletBoundsHelpers', 'leafletData', 'leafletDrawEvents', MapCtrl]);
 angular.module('trailsApp').factory('mapDataService', MapDataService);
 angular.module('trailsApp').filter('beautifyFilter', MapFilters.beautifyFilter);
 angular.module('trailsApp').filter('distanceFilter', MapFilters.distanceFilter);

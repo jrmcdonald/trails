@@ -2714,6 +2714,10 @@ lcid@^1.0.0:
   dependencies:
     invert-kv "^1.0.0"
 
+leaflet-control-geocoder:
+  version "1.5.4"
+  resolved "https://registry.yarnpkg.com/leaflet-control-geocoder/-/leaflet-control-geocoder-1.5.4.tgz#8f977dba9da0cbbebfa19659cbf0f49f6e268620"
+
 leaflet-draw:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/leaflet-draw/-/leaflet-draw-0.4.0.tgz#1441f10c390588b6d70effcc52f4cb95a96d5260"
