@@ -18,6 +18,6 @@
     </form>
   </li>
   <li><b>Distance:</b> {{ distance | distanceFilter:$parent.metric }}</li>
-  <li><b>Elevation Change:</b> 0</li>
+  <li><b>Elevation Gain:</b> {{ elevationGain | elevationFilter:$parent.metric }}</li>
   <li><b>Walking Time:</b> 0</li>
 </ul>

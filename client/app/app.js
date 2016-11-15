@@ -20,6 +20,8 @@ const MapDetailsModalCtrl = require('./components/mapDetails/mapDetailsModal.con
 
 const TrackDetailsCtrl = require('./components/trackDetails/trackDetails.controller');
 const TrackDetailsDirectives = require('./components/trackDetails/trackDetails.directives');
+const TrackDetailsService = require('./components/trackDetails/trackDetails.service');
+const ElevationService = require('./components/trackDetails/elevation.service');
 
 const DownloadCtrl = require('./components/download/download.controller');
 const DownloadDirectives = require('./components/download/download.directives');
@@ -34,13 +36,16 @@ angular.module('trailsApp').controller('MapCtrl', ['$scope', '$compile', 'leafle
 angular.module('trailsApp').factory('mapDataService', MapDataService);
 angular.module('trailsApp').filter('beautifyFilter', MapFilters.beautifyFilter);
 angular.module('trailsApp').filter('distanceFilter', MapFilters.distanceFilter);
+angular.module('trailsApp').filter('elevationFilter', MapFilters.elevationFilter);
 
 angular.module('trailsApp').controller('MapDetailsCtrl', ['$scope', '$exceptionHandler', '$sanitize', 'leafletBoundsHelpers', 'mapDataService', 'orderByFilter', MapDetailsCtrl]);
 angular.module('trailsApp').directive('mapDetailsModal', MapDetailsDirectives.mapDetailsModal);
 angular.module('trailsApp').controller('MapDetailsModalCtrl', ['$scope', '$uibModal', MapDetailsModalCtrl]);
 
-angular.module('trailsApp').controller('TrackDetailsCtrl', ['$scope', TrackDetailsCtrl]);
+angular.module('trailsApp').controller('TrackDetailsCtrl', ['$scope', 'trackDetailsService', TrackDetailsCtrl]);
 angular.module('trailsApp').directive('trackDetailsPopup', TrackDetailsDirectives.trackDetailsPopup);
+angular.module('trailsApp').factory('trackDetailsService', ['elevationService', TrackDetailsService]);
+angular.module('trailsApp').factory('elevationService', ElevationService);
 
 angular.module('trailsApp').controller('DownloadCtrl', ['$scope', DownloadCtrl]);
 angular.module('trailsApp').directive('downloadModal', DownloadDirectives.downloadModal);

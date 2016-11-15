@@ -21,3 +21,17 @@ exports.distanceFilter = function distanceFilter($filter) {
     return `${distance} ${unit}`;
   };
 };
+
+exports.elevationFilter = function elevationFilter($filter) {
+  return function (elevation, metric = false) {
+    const unit = (metric) ? 'm' : 'ft';
+
+    if (!metric) {
+      elevation *= 3.28084;
+    }
+
+    elevation = $filter('number')(elevation, 0);
+
+    return `${elevation} ${unit}`;
+  };
+};

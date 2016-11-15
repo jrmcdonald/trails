@@ -1,10 +1,17 @@
 const Utils = require('../common/utils/index');
 
-module.exports = function TrackDetailsCtrl($scope) {
+module.exports = function TrackDetailsCtrl($scope, TrackDetailsService) {
   let title = '';
 
   $scope.editing = false;
   $scope.distance = Utils.getDistance($scope.layer);
+
+  TrackDetailsService.getElevationGain($scope.layer).then((gain) => {
+    $scope.elevationGain = gain;
+  }).catch((err) => {
+    // TODO: better error handling here.
+    $scope.elevationGain = 0;
+  });
 
   $scope.edit = function edit() {
     $scope.editing = true;
