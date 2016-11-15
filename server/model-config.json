@@ -14,43 +14,47 @@
     ]
   },
   "User": {
-    "dataSource": "cloudant",
+    "dataSource": "db",
     "public": false
   },
   "AccessToken": {
-    "dataSource": "cloudant",
+    "dataSource": "db",
     "public": false
   },
   "ACL": {
-    "dataSource": "cloudant",
+    "dataSource": "db",
     "public": false
   },
   "RoleMapping": {
-    "dataSource": "cloudant",
+    "dataSource": "db",
     "public": false
   },
   "Role": {
-    "dataSource": "cloudant",
+    "dataSource": "db",
     "public": false
   },
   "FeatureCollection": {
-    "dataSource": "cloudant",
+    "dataSource": "db",
     "public": false
   },
   "Feature": {
-    "dataSource": "cloudant",
+    "dataSource": "db",
     "public": false,
     "$promise": {},
     "$resolved": true
   },
   "Geometry": {
-    "dataSource": "cloudant",
+    "dataSource": "db",
     "public": false
   },
   "Map": {
-    "dataSource": "cloudant",
+    "dataSource": "db",
     "public": true,
     "$promise": {},
     "$resolved": true
+  },
+  "Elevation": {
+    "public": true,
+    "dataSource": "elevations"
   }
 }

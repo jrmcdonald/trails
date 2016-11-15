@@ -1,0 +1,20 @@
+{
+  "name": "Elevation",
+  "plural": "Elevation",
+  "base": "Model",
+  "idInjection": true,
+  "properties": {
+    "points": {
+      "type": "string",
+      "required": true
+    },
+    "key": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": []
+}
