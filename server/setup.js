@@ -56,7 +56,7 @@ exports.elevations = function elevations() {
             },
           },
           functions: {
-            list: [
+            List: [
               'points',
             ],
           },
