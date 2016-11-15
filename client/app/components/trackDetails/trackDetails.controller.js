@@ -6,8 +6,9 @@ module.exports = function TrackDetailsCtrl($scope, TrackDetailsService) {
   $scope.editing = false;
   $scope.distance = Utils.getDistance($scope.layer);
 
-  TrackDetailsService.getElevationGain($scope.layer).then((gain) => {
-    $scope.elevationGain = gain;
+  TrackDetailsService.getElevationGain($scope.layer).then((elevationGain) => {
+    $scope.elevationGain = elevationGain;
+    $scope.walkingTime = TrackDetailsService.getWalkingTime($scope.distance, $scope.elevationGain);
   }).catch((err) => {
     // TODO: better error handling here.
     $scope.elevationGain = 0;

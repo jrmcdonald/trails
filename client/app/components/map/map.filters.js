@@ -35,3 +35,20 @@ exports.elevationFilter = function elevationFilter($filter) {
     return `${elevation} ${unit}`;
   };
 };
+
+exports.minutesFilter = function elevationFilter($filter) {
+  return function (minutes) {
+    minutes = $filter('number')(minutes, 0);
+    let time = '';
+
+    if (minutes < 60) {
+      time = `${minutes} mins`;
+    } else if (minutes % 60 === 0) {
+      time = `${minutes / 60} hrs`;
+    } else {
+      time = `${minutes / 60} hrs ${minutes % 60} mins`;
+    }
+
+    return time;
+  };
+};

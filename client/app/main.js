@@ -38,6 +38,7 @@ angular.module('trailsApp').factory('mapDataService', MapDataService);
 angular.module('trailsApp').filter('beautifyFilter', MapFilters.beautifyFilter);
 angular.module('trailsApp').filter('distanceFilter', MapFilters.distanceFilter);
 angular.module('trailsApp').filter('elevationFilter', MapFilters.elevationFilter);
+angular.module('trailsApp').filter('minutesFilter', MapFilters.minutesFilter);
 
 angular.module('trailsApp').controller('MapDetailsCtrl', ['$scope', '$exceptionHandler', '$sanitize', 'leafletBoundsHelpers', 'mapDataService', 'orderByFilter', MapDetailsCtrl]);
 angular.module('trailsApp').directive('mapDetailsModal', MapDetailsDirectives.mapDetailsModal);
@@ -545,6 +546,23 @@ exports.elevationFilter = function elevationFilter($filter) {
   };
 };
 
+exports.minutesFilter = function elevationFilter($filter) {
+  return function (minutes) {
+    minutes = $filter('number')(minutes, 0);
+    let time = '';
+
+    if (minutes < 60) {
+      time = `${minutes} mins`;
+    } else if (minutes % 60 === 0) {
+      time = `${minutes / 60} hrs`;
+    } else {
+      time = `${minutes / 60} hrs ${minutes % 60} mins`;
+    }
+
+    return time;
+  };
+};
+
 },{"../common/utils/index":4}],13:[function(require,module,exports){
 module.exports = function MapDataService($http) {
   const BASE_API_URL = 'https://trails.eu-gb.mybluemix.net/api/Maps';
@@ -689,7 +707,7 @@ module.exports = function TrackDetailsService(ElevationService) {
     // Naismith's rule = 1 hour per 5km forward and 1 hour per 600m ascent.
     const forwards = kilometres / 5;
     const ascent = elevationGain / 600;
-    const minutes = (kilometres * 60) + (ascent * 60);
+    const minutes = (forwards * 60) + (ascent * 60);
 
     return minutes;
   };

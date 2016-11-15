@@ -37,6 +37,7 @@ angular.module('trailsApp').factory('mapDataService', MapDataService);
 angular.module('trailsApp').filter('beautifyFilter', MapFilters.beautifyFilter);
 angular.module('trailsApp').filter('distanceFilter', MapFilters.distanceFilter);
 angular.module('trailsApp').filter('elevationFilter', MapFilters.elevationFilter);
+angular.module('trailsApp').filter('minutesFilter', MapFilters.minutesFilter);
 
 angular.module('trailsApp').controller('MapDetailsCtrl', ['$scope', '$exceptionHandler', '$sanitize', 'leafletBoundsHelpers', 'mapDataService', 'orderByFilter', MapDetailsCtrl]);
 angular.module('trailsApp').directive('mapDetailsModal', MapDetailsDirectives.mapDetailsModal);
