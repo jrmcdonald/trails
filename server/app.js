@@ -1,33 +1,15 @@
+const config = require('config');
 const express = require('express');
-const logger = require('morgan');
-const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
-
-const elevations = require('./routes/elevations');
+const logger = require('winston');
 
 const app = express();
 
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
+logger.level = config.get('App.config.level');
 
-app.use('/elevations', elevations);
+require('./boot/express')(app);
 
-// catch 404 and forward to error handler
-app.use((req, res, next) => {
-  const err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});
+const server = require('./boot/server')(app, logger);
 
-// error handler
-app.use((err, req, res, next) => {
-  if (req.app.get('env') !== 'development') {
-    delete err.stack;
-  }
+server.start();
 
-  res.status(err.status || 500).json(err);
-});
-
-module.exports = app;
+exports.module = app;
