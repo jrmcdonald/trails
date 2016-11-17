@@ -1,0 +1,8 @@
+{
+  "Elevations": {
+    "api": {
+      "url": "http://dev.virtualearth.net/REST/v1/Elevation",
+      "key": "undefined"
+    }
+  }
+}
