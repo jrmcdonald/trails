@@ -2,6 +2,7 @@ const config = require('config');
 const http = require('http');
 
 const port = config.get('App.config.port');
+const listen = config.get('App.config.listen');
 
 module.exports = function Server(app, logger) {
   const server = http.createServer(app);
@@ -40,6 +41,7 @@ module.exports = function Server(app, logger) {
   };
 
   const start = function start() {
+    if (!listen) return;
     server.listen(port);
     server.on('error', onServerError);
     server.on('listening', onServerListen);

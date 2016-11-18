@@ -1,5 +1,8 @@
 module.exports = {
     "extends": "airbnb",
+    "env": {
+        "mocha": true,
+    },
     "installedESLint": true,
     "plugins": [
         "react",
