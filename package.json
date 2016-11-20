@@ -4,8 +4,8 @@
   "private": "true",
   "scripts": {
     "start": "node ./server/app",
-    "mocha": "./node_modules/.bin/cross-env NODE_ENV=testing ./node_modules/.bin/mocha",
-    "test-server": "./node_modules/.bin/cross-env NODE_ENV=testing ./node_modules/.bin/mocha ./server/test/**/test-*.js"
+    "mocha": "./node_modules/.bin/cross-env NODE_ENV=testing NODE_CONFIG_DIR=./server/config ./node_modules/.bin/mocha",
+    "test-server": "./node_modules/.bin/cross-env NODE_ENV=testing NODE_CONFIG_DIR=./server/config ./node_modules/.bin/mocha ./server/test/**/test-*.js"
   },
   "dependencies": {
     "angular": "^1.5.8",
