@@ -101,7 +101,7 @@ describe('Map Model Tests', function () {
       copiedData.data.features[0].geometry.coordinates[0] = [-4.078014492988587];
 
       const map = new Map(copiedData);
-      return expect(map.validate()).to.be.fulfilled;
+      return expect(map.validate()).to.be.rejected;
     });
 
     it('should require map.data.features[n].geometry.coordinates to be valid (<3)', function () {
@@ -109,17 +109,38 @@ describe('Map Model Tests', function () {
       copiedData.data.features[0].geometry.coordinates[0] = [-4.078014492988587, 53.0686355323667, 1, 1];
 
       const map = new Map(copiedData);
-      return expect(map.validate()).to.be.fulfilled;
+      return expect(map.validate()).to.be.rejected;
     });
   });
 
   describe('Functions Tests', function () {
-    // after(function () {
-    //   return expect(Map.remove({})).to.be.fulfilled;
-    // });
+    const newMap = new Map(data);
+
+    before(function () {
+      return expect(Map.remove({})).to.be.fulfilled;
+    });
+
+    after(function () {
+      return expect(Map.remove({})).to.be.fulfilled;
+    });
 
     it('should save maps to the database', function () {
-      return expect(Map.create(data)).to.be.fulfilled;
+      return expect(newMap.save()).to.be.fullfilled;
+    });
+
+    it('should find maps in the database', function () {
+      return expect(Map.findById(newMap._id).exec()).to.be.fulfilled;
+    });
+
+    it('should find and update maps in the database', function () {
+      const find = Map.findById(newMap._id).exec();
+
+      const update = find.then((map) => {
+        map.name = 'Simple Map 2 Features (Updated)';
+        return map.save();
+      });
+
+      return expect(update).to.be.fulfilled;
     });
   });
 });
