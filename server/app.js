@@ -21,4 +21,4 @@ const db = require('./boot/mongoose')(logger);
 
 db.connect(server.start);
 
-exports.module = app;
+module.exports = app;
