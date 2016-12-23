@@ -3,6 +3,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 
 const elevations = require('../routes/elevations');
+const maps = require('../routes/maps');
 
 module.exports = function bootExpress(app) {
   app.use(morgan('dev'));
@@ -11,6 +12,7 @@ module.exports = function bootExpress(app) {
   app.use(cookieParser());
 
   app.use('/elevations', elevations);
+  app.use('/maps', maps);
 
   // catch 404 and forward to error handler
   app.use((req, res, next) => {
