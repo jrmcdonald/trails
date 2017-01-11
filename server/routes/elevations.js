@@ -1,11 +1,10 @@
-const config = require('config');
 const express = require('express');
 const request = require('request');
 
 const router = express.Router();
 
-const BASE_URL = config.get('Elevations.api.url');
-const API_KEY = config.get('Elevations.api.key');
+const BASE_URL = process.env.ELEVATIONS_API_URI;
+const API_KEY = process.env.ELEVATIONS_API_KEY;
 
 /* GET home page. */
 router.get('/list', (req, res, next) => {

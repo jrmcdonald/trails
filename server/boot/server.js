@@ -1,8 +1,7 @@
-const config = require('config');
 const http = require('http');
 
-const port = config.get('App.config.port');
-const listen = config.get('App.config.listen');
+const port = process.env.APP_CONFIG_PORT;
+const listen = process.env.APP_CONFIG_LISTEN;
 
 module.exports = function Server(app, logger) {
   const server = http.createServer(app);

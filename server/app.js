@@ -1,4 +1,3 @@
-const config = require('config');
 const fs = require('fs');
 const express = require('express');
 const join = require('path').join;
@@ -6,7 +5,7 @@ const logger = require('winston');
 
 const app = express();
 
-logger.level = config.get('App.config.level');
+logger.level = process.env.APP_CONFIG_LOGGING;
 
 const models = join(__dirname, './models');
 

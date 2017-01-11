@@ -1,8 +1,7 @@
-const config = require('config');
 const mongoose = require('mongoose');
 
 module.exports = function Mongoose(logger) {
-  const DB_URI = config.get('App.database.uri');
+  const DB_URI = process.env.MONGO_URI;
 
   const connect = function connect(serverCallback) {
     const db = mongoose.connect(DB_URI).connection;
