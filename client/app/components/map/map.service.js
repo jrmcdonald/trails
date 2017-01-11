@@ -1,5 +1,5 @@
 module.exports = function MapDataService($http) {
-  const BASE_API_URL = 'https://trails.eu-gb.mybluemix.net/api/Maps';
+  const BASE_API_URL = 'http://localhost:3000/api/maps';
 
   const getMaps = function getMaps($filter = null) {
     let $filterString = '';

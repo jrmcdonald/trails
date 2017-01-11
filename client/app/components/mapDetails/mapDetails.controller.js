@@ -21,11 +21,13 @@ module.exports = function MapDetailsCtrl($scope, $exceptionHandler, $sanitize, l
 
   const loadMaps = function loadMaps() {
     mapDataService.getMaps('{ "fields": {"name": true, "id": true} }').then((data) => {
-      $scope.maps = orderByFilter(data, 'name');
-      if (typeof $grandParentScope.loadedMap !== 'undefined' && $grandParentScope.loadedMap !== null) {
-        $scope.model.selectedMap = $grandParentScope.loadedMap.id;
-      } else {
-        $scope.model.selectedMap = $scope.maps[0].id;
+      if (data.length > 0) {
+        $scope.maps = orderByFilter(data, 'name');
+        if (typeof $grandParentScope.loadedMap !== 'undefined' && $grandParentScope.loadedMap !== null) {
+          $scope.model.selectedMap = $grandParentScope.loadedMap.id;
+        } else {
+          $scope.model.selectedMap = $scope.maps[0].id;
+        }
       }
     });
   };

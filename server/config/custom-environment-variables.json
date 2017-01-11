@@ -1,0 +1,12 @@
+{
+  "App": {
+    "config": {
+      "port": "PORT"
+    }
+  },
+  "Elevations": {
+    "api": {
+      "key": "BING_KEY"
+    }
+  }
+}
