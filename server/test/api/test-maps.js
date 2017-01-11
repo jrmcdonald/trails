@@ -40,7 +40,7 @@ describe('Maps API Tests', function () {
 
   it('should return an unfiltered collection of maps', function () {
     const p = chai.request(app)
-      .get('/maps')
+      .get('/api/maps')
       .then((res) => {
         expect(res.body).to.have.length(2);
         expect(res.body[0]).to.have.property('data');
@@ -51,7 +51,7 @@ describe('Maps API Tests', function () {
 
   it('should return a filtered collection of maps', function () {
     const p = chai.request(app)
-      .get('/maps')
+      .get('/api/maps')
       .query({ filter: '{ "fields": {"name": 1} }' })
       .then((res) => {
         expect(res.body).to.have.length(2);
@@ -63,7 +63,7 @@ describe('Maps API Tests', function () {
 
   it('should return an error when passed an invalid filter', function () {
     const p = chai.request(app)
-      .get('/maps')
+      .get('/api/maps')
       .query({ filter: '{ fields: {"name": 1} }' })
       .catch((err) => {
         expect(err).to.have.status(400);
@@ -74,7 +74,7 @@ describe('Maps API Tests', function () {
 
   it('should return an unfiltered single map', function () {
     const p = chai.request(app)
-      .get(`/maps/${mapIds[0]}`)
+      .get(`/api/maps/${mapIds[0]}`)
       .then((res) => {
         expect(res.body.name).to.equal(data.maps[0].name);
         expect(res.body.data.features[0].geometry.coordinates).to.have.length(4);
@@ -85,7 +85,7 @@ describe('Maps API Tests', function () {
 
   it('should return a filtered single map', function () {
     const p = chai.request(app)
-      .get(`/maps/${mapIds[0]}`)
+      .get(`/api/maps/${mapIds[0]}`)
       .query({ filter: '{ "fields": {"name": true, "id": true} }' })
       .then((res) => {
         expect(res.body.name).to.equal(data.maps[0].name);
@@ -97,7 +97,7 @@ describe('Maps API Tests', function () {
 
   it('should return an error when passed an invalid filter', function () {
     const p = chai.request(app)
-      .get(`/maps/${mapIds[0]}`)
+      .get(`/api/maps/${mapIds[0]}`)
       .query({ filter: '{ fields: {"name": 1} }' })
       .catch((err) => {
         expect(err).to.have.status(400);
@@ -110,7 +110,7 @@ describe('Maps API Tests', function () {
     data.maps[1].name = 'Simple Map 2 Updated';
 
     const p = chai.request(app)
-      .put(`/maps/${mapIds[1]}`)
+      .put(`/api/maps/${mapIds[1]}`)
       .send(data.maps[1])
       .then((res) => {
         expect(res.body.name).to.equal(data.maps[1].name);
@@ -121,7 +121,7 @@ describe('Maps API Tests', function () {
 
   it('should delete an existing map', function () {
     const p = chai.request(app)
-      .delete(`/maps/${mapIds[0]}`)
+      .delete(`/api/maps/${mapIds[0]}`)
       .then((res) => {
         expect(res.body.name).to.equal(data.maps[0].name);
       });
@@ -131,7 +131,7 @@ describe('Maps API Tests', function () {
 
   it('should return an error when attemtping to delete a non-existant map', function () {
     const p = chai.request(app)
-      .delete('/maps/INVALIDIDENTIFIER')
+      .delete('/api/maps/INVALIDIDENTIFIER')
       .catch((err) => {
         expect(err).to.have.status(500);
       });
@@ -141,7 +141,7 @@ describe('Maps API Tests', function () {
 
   it('should create a new map', function () {
     const p = chai.request(app)
-      .post('/maps')
+      .post('/api/maps')
       .send(data.maps[0])
       .then((res) => {
         expect(res.body.name).to.equal(data.maps[0].name);

@@ -12,7 +12,7 @@ chai.use(chaiPromised);
 describe('Elevations API Tests', function () {
   it('should return status 400 error with no "points" parameter', function () {
     const p = chai.request(app)
-      .get('/elevations/list')
+      .get('/api/elevations/list')
       .catch((err) => {
         expect(err).to.have.status(400);
       });
@@ -22,7 +22,7 @@ describe('Elevations API Tests', function () {
 
   it('should return status 400 error with empty "points" parameter', function () {
     const p = chai.request(app)
-      .get('/elevations/list')
+      .get('/api/elevations/list')
       .query({ points: '' })
       .catch((err) => {
         expect(err).to.have.status(400);
@@ -33,7 +33,7 @@ describe('Elevations API Tests', function () {
 
   it('should return elevation data', function () {
     const p = chai.request(app)
-      .get('/elevations/list')
+      .get('/api/elevations/list')
       .query({ points: '53.06863553236679,-4.078014492988587' })
       .then((res) => {
         expect(res.body.resourceSets).to.have.length(1);

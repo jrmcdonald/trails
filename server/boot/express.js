@@ -1,6 +1,7 @@
-const morgan = require('morgan');
-const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const cors = require('cors');
+const morgan = require('morgan');
 
 const elevations = require('../routes/elevations');
 const maps = require('../routes/maps');
@@ -10,9 +11,10 @@ module.exports = function bootExpress(app) {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(cookieParser());
+  app.use(cors());
 
-  app.use('/elevations', elevations);
-  app.use('/maps', maps);
+  app.use('/api/elevations', elevations);
+  app.use('/api/maps', maps);
 
   // catch 404 and forward to error handler
   app.use((req, res, next) => {
