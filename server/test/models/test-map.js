@@ -129,11 +129,11 @@ describe('Map Model Tests', function () {
     });
 
     it('should find maps in the database', function () {
-      return expect(Map.findById(newMap._id).exec()).to.be.fulfilled;
+      return expect(Map.findById(newMap.id).exec()).to.be.fulfilled;
     });
 
     it('should find and update maps in the database', function () {
-      const find = Map.findById(newMap._id).exec();
+      const find = Map.findById(newMap.id).exec();
 
       const update = find.then((map) => {
         map.name = 'Simple Map 2 Features (Updated)';

@@ -56,6 +56,16 @@ const MapSchema = new Schema({
       default: [],
     },
   },
-}, { typeKey: '$type' });
+}, {
+  typeKey: '$type',
+  toObject: {
+    virtuals: true,
+  },
+  toJSON: {
+    virtuals: true,
+  },
+});
+
+MapSchema.virtual('id').get(() => this._id);
 
 mongoose.model('Map', MapSchema);
