@@ -3,10 +3,14 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "postinstall": "gulp browserify",
+    "build:all": "npm run build:css && npm run build:images && npm run build:js",
+    "build:css": "gulp css",
+    "build:images": "cpx node_modules/leaflet*/dist/images/*.{gif,png,svg} public/assets/lib/leaflet/",
+    "build:js": "browserify public/app/app.js -o public/app/main.js",
+    "postinstall": "npm run build:all",
     "start": "nf start",
-    "mocha": "nf run mocha",
-    "test-server": "nf run mocha ./server/test/**/test-*.js"
+    "test:server": "nf run mocha ./server/test/**/test-*.js",
+    "watch:js": "watchify public/app/app.js -o public/app/main.js --iw node_modules --iw server -v"
   },
   "dependencies": {
     "angular": "^1.5.8",
@@ -21,14 +25,13 @@
     "chai-http": "^3.0.0",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.1",
+    "cpx": "^1.5.0",
     "debug": "^2.3.2",
     "express": "^4.14.0",
     "foreman": "^2.0.0",
     "generate-schema": "^2.3.1",
     "gulp": "^3.9.1",
     "gulp-concat-css": "^2.3.0",
-    "gulp-connect": "^5.0.0",
-    "gulp-replace": "^0.5.4",
     "karma": "^1.3.0",
     "karma-mocha": "^1.3.0",
     "leaflet": "^1.0.1",
@@ -42,8 +45,8 @@
     "tokml": "^0.4.0",
     "ui-leaflet": "^2.0.0",
     "ui-leaflet-draw": "^0.0.3",
-    "vinyl-source-stream": "^1.1.0",
     "vkbeautify": "^0.99.1",
+    "watchify": "^3.8.0",
     "winston": "^2.3.0"
   },
   "license": "MIT",
