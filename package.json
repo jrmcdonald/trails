@@ -1,7 +1,7 @@
 {
   "name": "Trails",
   "version": "1.0.0",
-  "private": "true",
+  "private": true,
   "scripts": {
     "start": "nf start",
     "mocha": "nf run mocha",

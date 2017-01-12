@@ -1,6 +1,6 @@
 const http = require('http');
 
-const port = process.env.APP_CONFIG_PORT;
+const port = process.env.PORT || 8080;
 const listen = process.env.APP_CONFIG_LISTEN;
 
 module.exports = function Server(app, logger) {
