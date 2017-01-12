@@ -1,7 +1,7 @@
 const http = require('http');
 
 const port = process.env.PORT || 8080;
-const listen = process.env.APP_CONFIG_LISTEN;
+const listen = (process.env.APP_CONFIG_LISTEN === 'true');
 
 module.exports = function Server(app, logger) {
   const server = http.createServer(app);

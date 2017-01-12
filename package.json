@@ -9,7 +9,7 @@
     "build:js": "browserify public/app/app.js -o public/app/main.js",
     "postinstall": "npm run build:all",
     "start": "nf start",
-    "test:server": "nf run mocha ./server/test/**/test-*.js",
+    "test:server": "nf -e .env,.env-test run mocha -- --recursive server/test",
     "watch:js": "watchify public/app/app.js -o public/app/main.js --iw node_modules --iw server -v"
   },
   "dependencies": {

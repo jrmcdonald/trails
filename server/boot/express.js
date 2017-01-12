@@ -8,9 +8,15 @@ const path = require('path');
 const elevations = require('../routes/elevations');
 const maps = require('../routes/maps');
 
+const NODE_ENV = process.env.NODE_ENV;
+
 module.exports = function bootExpress(app) {
   app.use(express.static(path.join(__dirname, '/../../public')));
-  app.use(morgan('dev'));
+
+  if (NODE_ENV !== 'test') {
+    app.use(morgan('dev'));
+  }
+
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(cookieParser());
