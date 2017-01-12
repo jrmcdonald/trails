@@ -25,6 +25,8 @@ describe('Maps API Tests', function () {
   before(function () {
     const promises = [];
 
+    promises.push(Map.remove({}));
+
     for (const map of data.maps) {
       const model = new Map(map);
       mapIds.push(model._id);
