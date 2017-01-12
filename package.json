@@ -15,6 +15,7 @@
     "angular-simple-logger": "^0.1.7",
     "angular-ui-bootstrap": "^2.2.0",
     "body-parser": "^1.15.2",
+    "browserify": "^13.1.0",
     "chai": "^3.5.0",
     "chai-as-promised": "^6.0.0",
     "chai-http": "^3.0.0",
@@ -24,6 +25,10 @@
     "express": "^4.14.0",
     "foreman": "^2.0.0",
     "generate-schema": "^2.3.1",
+    "gulp": "^3.9.1",
+    "gulp-concat-css": "^2.3.0",
+    "gulp-connect": "^5.0.0",
+    "gulp-replace": "^0.5.4",
     "karma": "^1.3.0",
     "karma-mocha": "^1.3.0",
     "leaflet": "^1.0.1",
@@ -37,21 +42,16 @@
     "tokml": "^0.4.0",
     "ui-leaflet": "^2.0.0",
     "ui-leaflet-draw": "^0.0.3",
+    "vinyl-source-stream": "^1.1.0",
     "vkbeautify": "^0.99.1",
     "winston": "^2.3.0"
   },
   "license": "MIT",
   "devDependencies": {
-    "browserify": "^13.1.0",
     "eslint": "^3.8.1",
     "eslint-config-airbnb": "^12.0.0",
     "eslint-plugin-import": "^2.0.1",
     "eslint-plugin-jsx-a11y": "^2.2.3",
-    "eslint-plugin-react": "^6.4.1",
-    "gulp": "^3.9.1",
-    "gulp-concat-css": "^2.3.0",
-    "gulp-connect": "^5.0.0",
-    "gulp-replace": "^0.5.4",
-    "vinyl-source-stream": "^1.1.0"
+    "eslint-plugin-react": "^6.4.1"
   }
 }
