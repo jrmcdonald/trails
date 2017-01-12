@@ -16,3 +16,4 @@ coverage
 .vscode
 *.xml
 .env
+public/app/main.js

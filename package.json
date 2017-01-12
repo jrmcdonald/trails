@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "postinstall": "gulp browserify",
     "start": "nf start",
     "mocha": "nf run mocha",
     "test-server": "nf run mocha ./server/test/**/test-*.js"
