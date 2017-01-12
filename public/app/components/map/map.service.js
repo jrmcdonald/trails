@@ -1,5 +1,5 @@
 module.exports = function MapDataService($http) {
-  const BASE_API_URL = 'http://localhost:3000/api/maps';
+  const BASE_API_URL = '/api/maps';
 
   const getMaps = function getMaps($filter = null) {
     let $filterString = '';

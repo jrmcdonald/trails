@@ -1,5 +1,5 @@
 module.exports = function ElevationsService($http) {
-  const BASE_API_URL = 'http://localhost:3000/api/elevations';
+  const BASE_API_URL = '/api/elevations';
 
   const getPoints = function getPoints(points) {
     const pointString = points.map(point => `${point.lat},${point.lng}`).join(',');
