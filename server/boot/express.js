@@ -4,9 +4,12 @@ const cors = require('cors');
 const express = require('express');
 const morgan = require('morgan');
 const path = require('path');
+const passport = require('passport');
 
+const auth = require('../routes/auth');
 const elevations = require('../routes/elevations');
 const maps = require('../routes/maps');
+const users = require('../routes/users');
 
 const NODE_ENV = process.env.NODE_ENV;
 
@@ -17,13 +20,18 @@ module.exports = function bootExpress(app) {
     app.use(morgan('dev'));
   }
 
+  require('./passport.js')(passport);
+
+  app.use(passport.initialize());
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(cookieParser());
   app.use(cors());
 
-  app.use('/api/elevations', elevations);
-  app.use('/api/maps', maps);
+  app.use('/api/elevations', passport.authenticate('jwt', { session: false }), elevations);
+  app.use('/api/maps', passport.authenticate('jwt', { session: false }), maps);
+  app.use('/users', users);
+  app.use('/auth', auth);
 
   // catch 404 and forward to error handler
   app.use((req, res, next) => {
