@@ -23,7 +23,7 @@ Simple trail mapping application created using Angular, Leaflet.js, Express and 
 
     ```git clone https://github.com/jrmcdonald/trails```
 
-2. Copy `.env.example` to `.env` and customise for your local environment
+2. Copy `.env-example` to `.env` and customise for your local environment
 
 3. Run:
 
