@@ -5,7 +5,7 @@
   "scripts": {
     "build:all": "npm run build:css && npm run build:images && npm run build:js",
     "build:css": "gulp css",
-    "build:images": "cpx node_modules/leaflet*/dist/images/*.{gif,png,svg} public/assets/lib/leaflet/",
+    "build:images": "cpx \"node_modules/leaflet*/dist/images/*.{gif,png,svg}\" public/assets/lib/leaflet/",
     "build:js": "browserify public/app/app.js -o public/app/main.js",
     "postinstall": "npm run build:all",
     "start": "nf start",
@@ -20,7 +20,7 @@
     "angular-ui-bootstrap": "^2.2.0",
     "bcryptjs": "^2.4.0",
     "body-parser": "^1.15.2",
-    "browserify": "^13.1.0",
+    "browserify": "^14.0.0",
     "chai": "^3.5.0",
     "chai-as-promised": "^6.0.0",
     "chai-http": "^3.0.0",
@@ -39,7 +39,6 @@
     "leaflet": "^1.0.1",
     "leaflet-control-geocoder": "^1.5.4",
     "leaflet-draw": "^0.4.0",
-    "lodash": "^4.17.4",
     "mocha": "^3.1.2",
     "mongoose": "^4.6.8",
     "morgan": "^1.7.0",
@@ -57,9 +56,9 @@
   "license": "MIT",
   "devDependencies": {
     "eslint": "^3.8.1",
-    "eslint-config-airbnb": "^12.0.0",
+    "eslint-config-airbnb": "^14.0.0",
     "eslint-plugin-import": "^2.0.1",
-    "eslint-plugin-jsx-a11y": "^2.2.3",
+    "eslint-plugin-jsx-a11y": "^3.0.2",
     "eslint-plugin-react": "^6.4.1"
   }
 }
