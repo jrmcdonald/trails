@@ -24,7 +24,7 @@ router.post('/', (req, res, next) => {
 
   result.then((user) => {
     res.status(201);
-    res.send({ data: { message: 'User created successfully. ' } });
+    res.send({ data: { message: 'User created successfully.' } });
   }).catch((err) => {
     res.status(409);
     res.send({ errors: [{ status: 409, title: 'User Creation Failed', detail: 'User already exists.' }] });

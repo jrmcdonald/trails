@@ -10,6 +10,7 @@
     "postinstall": "npm run build:all",
     "start": "nf start",
     "test:server": "nf -e .env,.env-test run mocha -- --recursive server/test",
+    "test:file": "nf -e .env,.env-test run mocha -- --recursive",
     "watch:js": "watchify public/app/app.js -o public/app/main.js --iw node_modules --iw server -v"
   },
   "dependencies": {
