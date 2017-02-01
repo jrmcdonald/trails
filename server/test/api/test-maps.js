@@ -1,4 +1,5 @@
 /* eslint-disable func-names, prefer-arrow-callback */
+/* eslint no-underscore-dangle: ["error", { "allow": ["_id"] }] */
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const chaiPromised = require('chai-as-promised');
@@ -24,7 +25,7 @@ const User = mongoose.model('User');
 mongoose.Promise = global.Promise;
 
 describe('Maps API Tests', function () {
-  const auth = chai.request(app).post('/auth').send(userData);
+  let token;
   const mapIds = [];
 
   before(function () {
@@ -41,7 +42,19 @@ describe('Maps API Tests', function () {
       promises.push(model.save());
     });
 
-    return expect(Promise.all(promises)).to.be.fulfilled;
+    const preAuth = Promise.all(promises);
+
+    const postAuth = preAuth.then(() =>
+      chai.request(app)
+        .post('/auth')
+        .send(userData)
+        .then((res) => {
+          token = res.body.data.token;
+          Promise.resolve(true);
+        })
+    );
+
+    return expect(postAuth).to.be.fulfilled;
   });
 
   after(function () {
@@ -54,87 +67,75 @@ describe('Maps API Tests', function () {
   });
 
   it('should return an unfiltered collection of maps', function () {
-    const p = auth.then((resAuth) => {
-      chai.request(app)
-        .get('/api/maps')
-        .set('Authorization', `JWT ${resAuth.body.data.token}`)
-        .then((res) => {
-          expect(res.body).to.have.length(2);
-          expect(res.body[0]).to.have.property('data');
-        });
-    });
+    const p = chai.request(app)
+      .get('/api/maps')
+      .set('Authorization', `JWT ${token}`)
+      .then((res) => {
+        expect(res.body).to.have.length(2);
+        expect(res.body[0]).to.have.property('data');
+      });
 
     return expect(p).to.be.fulfilled;
   });
 
   it('should return a filtered collection of maps', function () {
-    const p = auth.then((resAuth) => {
-      chai.request(app)
-        .get('/api/maps')
-        .set('Authorization', `JWT ${resAuth.body.data.token}`)
-        .query({ filter: '{ "fields": {"name": 1} }' })
-        .then((res) => {
-          expect(res.body).to.have.length(2);
-          expect(res.body[0]).to.not.have.property('data');
-        });
-    });
+    const p = chai.request(app)
+      .get('/api/maps')
+      .set('Authorization', `JWT ${token}`)
+      .query({ filter: '{ "fields": {"name": 1} }' })
+      .then((res) => {
+        expect(res.body).to.have.length(2);
+        expect(res.body[0]).to.not.have.property('data');
+      });
 
     return expect(p).to.be.fulfilled;
   });
 
   it('should return an error when passed an invalid filter', function () {
-    const p = auth.then((resAuth) => {
-      chai.request(app)
-        .get('/api/maps')
-        .set('Authorization', `JWT ${resAuth.body.data.token}`)
-        .query({ filter: '{ fields: {"name": 1} }' })
-        .catch((err) => {
-          expect(err).to.have.status(400);
-        });
-    });
+    const p = chai.request(app)
+      .get('/api/maps')
+      .set('Authorization', `JWT ${token}`)
+      .query({ filter: '{ fields: {"name": 1} }' })
+      .catch((err) => {
+        expect(err).to.have.status(400);
+      });
 
     return expect(p).to.be.fulfilled;
   });
 
   it('should return an unfiltered single map', function () {
-    const p = auth.then((resAuth) => {
-      chai.request(app)
-        .get(`/api/maps/${mapIds[0]}`)
-        .set('Authorization', `JWT ${resAuth.body.data.token}`)
-        .then((res) => {
-          expect(res.body.name).to.equal(mapData.maps[0].name);
-          expect(res.body.data.features[0].geometry.coordinates).to.have.length(4);
-        });
-    });
+    const p = chai.request(app)
+      .get(`/api/maps/${mapIds[0]}`)
+      .set('Authorization', `JWT ${token}`)
+      .then((res) => {
+        expect(res.body.name).to.equal(mapData.maps[0].name);
+        expect(res.body.data.features[0].geometry.coordinates).to.have.length(4);
+      });
 
     return expect(p).to.be.fulfilled;
   });
 
   it('should return a filtered single map', function () {
-    const p = auth.then((resAuth) => {
-      chai.request(app)
-        .get(`/api/maps/${mapIds[0]}`)
-        .set('Authorization', `JWT ${resAuth.body.data.token}`)
-        .query({ filter: '{ "fields": {"name": true, "id": true} }' })
-        .then((res) => {
-          expect(res.body.name).to.equal(mapData.maps[0].name);
-          expect(res.body).to.not.have.property(mapData);
-        });
-    });
+    const p = chai.request(app)
+      .get(`/api/maps/${mapIds[0]}`)
+      .set('Authorization', `JWT ${token}`)
+      .query({ filter: '{ "fields": {"name": true, "id": true} }' })
+      .then((res) => {
+        expect(res.body.name).to.equal(mapData.maps[0].name);
+        expect(res.body).to.not.have.property(mapData);
+      });
 
     return expect(p).to.be.fulfilled;
   });
 
   it('should return an error when passed an invalid filter', function () {
-    const p = auth.then((resAuth) => {
-      chai.request(app)
-        .get(`/api/maps/${mapIds[0]}`)
-        .set('Authorization', `JWT ${resAuth.body.data.token}`)
-        .query({ filter: '{ fields: {"name": 1} }' })
-        .catch((err) => {
-          expect(err).to.have.status(400);
-        });
-    });
+    const p = chai.request(app)
+      .get(`/api/maps/${mapIds[0]}`)
+      .set('Authorization', `JWT ${token}`)
+      .query({ filter: '{ fields: {"name": 1} }' })
+      .catch((err) => {
+        expect(err).to.have.status(400);
+      });
 
     return expect(p).to.be.fulfilled;
   });
@@ -142,55 +143,47 @@ describe('Maps API Tests', function () {
   it('should update an existing map', function () {
     mapData.maps[1].name = 'Simple Map 2 Updated';
 
-    const p = auth.then((resAuth) => {
-      chai.request(app)
-        .put(`/api/maps/${mapIds[1]}`)
-        .set('Authorization', `JWT ${resAuth.body.data.token}`)
-        .send(mapData.maps[1])
-        .then((res) => {
-          expect(res.body.name).to.equal(mapData.maps[1].name);
-        });
-    });
+    const p = chai.request(app)
+      .put(`/api/maps/${mapIds[1]}`)
+      .set('Authorization', `JWT ${token}`)
+      .send(mapData.maps[1])
+      .then((res) => {
+        expect(res.body.name).to.equal(mapData.maps[1].name);
+      });
 
     return expect(p).to.be.fulfilled;
   });
 
   it('should delete an existing map', function () {
-    const p = auth.then((resAuth) => {
-      chai.request(app)
-        .delete(`/api/maps/${mapIds[0]}`)
-        .set('Authorization', `JWT ${resAuth.body.data.token}`)
-        .then((res) => {
-          expect(res.body.name).to.equal(mapData.maps[0].name);
-        });
-    });
+    const p = chai.request(app)
+      .delete(`/api/maps/${mapIds[0]}`)
+      .set('Authorization', `JWT ${token}`)
+      .then((res) => {
+        expect(res.body.name).to.equal(mapData.maps[0].name);
+      });
 
     return expect(p).to.be.fulfilled;
   });
 
   it('should return an error when attemtping to delete a non-existant map', function () {
-    const p = auth.then((resAuth) => {
-      chai.request(app)
-        .delete('/api/maps/INVALIDIDENTIFIER')
-        .set('Authorization', `JWT ${resAuth.body.data.token}`)
-        .catch((err) => {
-          expect(err).to.have.status(500);
-        });
-    });
+    const p = chai.request(app)
+      .delete('/api/maps/INVALIDIDENTIFIER')
+      .set('Authorization', `JWT ${token}`)
+      .catch((err) => {
+        expect(err).to.have.status(500);
+      });
 
     return expect(p).to.be.fulfilled;
   });
 
   it('should create a new map', function () {
-    const p = auth.then((resAuth) => {
-      chai.request(app)
-        .post('/api/maps')
-        .set('Authorization', `JWT ${resAuth.body.data.token}`)
-        .send(mapData.maps[0])
-        .then((res) => {
-          expect(res.body.name).to.equal(mapData.maps[0].name);
-        });
-    });
+    const p = chai.request(app)
+      .post('/api/maps')
+      .set('Authorization', `JWT ${token}`)
+      .send(mapData.maps[0])
+      .then((res) => {
+        expect(res.body.name).to.equal(mapData.maps[0].name);
+      });
 
     return expect(p).to.be.fulfilled;
   });
