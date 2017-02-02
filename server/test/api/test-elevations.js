@@ -15,7 +15,7 @@ chai.use(chaiPromised);
 const userFile = join(__dirname, '../data/simple-user.json');
 const userData = JSON.parse(fs.readFileSync(userFile, 'utf8'));
 
-const User = mongoose.model('User');
+const MUser = mongoose.model('User');
 
 mongoose.Promise = global.Promise;
 
@@ -24,9 +24,9 @@ describe('Elevations API Tests', function () {
 
   before(function () {
     const promises = [];
-    const user = new User(userData);
+    const user = new MUser(userData);
 
-    promises.push(User.remove({}));
+    promises.push(MUser.remove({}));
     promises.push(user.save());
 
     const preAuth = Promise.all(promises);
@@ -45,7 +45,7 @@ describe('Elevations API Tests', function () {
   });
 
   after(function () {
-    return expect(User.remove({})).to.be.fulfilled;
+    return expect(MUser.remove({})).to.be.fulfilled;
   });
 
   it('should return status 400 error with no "points" parameter', function () {

@@ -15,23 +15,23 @@ chai.use(chaiPromised);
 const file = join(__dirname, '../data/simple-user.json');
 const data = JSON.parse(fs.readFileSync(file, 'utf8'));
 
-const User = mongoose.model('User');
+const MUser = mongoose.model('User');
 
 mongoose.Promise = global.Promise;
 
 describe('Auth API Tests', function () {
   before(function () {
     const promises = [];
-    const user = new User(data);
+    const user = new MUser(data);
 
-    promises.push(User.remove({}));
+    promises.push(MUser.remove({}));
     promises.push(user.save());
 
     return expect(Promise.all(promises)).to.be.fulfilled;
   });
 
   after(function () {
-    return expect(User.remove({})).to.be.fulfilled;
+    return expect(MUser.remove({})).to.be.fulfilled;
   });
 
   it('should authenticate a valid user', function () {
