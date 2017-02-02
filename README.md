@@ -43,7 +43,7 @@ npm start
 
 - [x] Error handling for service calls.
 - [x] Delete saved maps.
-- [ ] Passport authentication for API.
+- [x] Passport authentication for API.
 - [x] Elevation data using Bing Elevation API.
 - [ ] Import data from GeoJSON, GPX or KML files.
 - [x] Search for map destinations.
