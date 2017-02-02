@@ -1,3 +1,4 @@
+/* eslint no-underscore-dangle: ["error", { "allow": ["_id"] }] */
 const express = require('express');
 const mongoose = require('mongoose');
 
@@ -24,7 +25,7 @@ router.get('/', (req, res, next) => {
     }
   }
 
-  const result = Map.find({}, projection).exec();
+  const result = Map.find({ owner: req.user._id }, projection).exec();
 
   result.then((maps) => {
     res.send(maps);
@@ -51,10 +52,15 @@ router.get('/:id', (req, res, next) => {
     }
   }
 
-  const result = Map.findById(req.params.id, projection).exec();
+  const result = Map.findOne({ _id: req.params.id, owner: req.user._id }, projection).exec();
 
   result.then((map) => {
-    res.send(map);
+    if (map === null) {
+      res.status(403);
+      res.send({ errors: [{ status: 403, title: 'Update failed', detail: 'Could not update the requested map. Either it does not exist or you do not have permission to modify it.' }] });
+    } else {
+      res.send(map);
+    }
   }).catch((err) => {
     res.status(500);
     res.send({ errors: [{ status: 500, title: 'An unexpected error occurred', detail: err }] });
@@ -62,6 +68,8 @@ router.get('/:id', (req, res, next) => {
 });
 
 router.post('/', (req, res, next) => {
+  req.body.owner = req.user._id;
+
   const result = new Map(req.body).save();
 
   result.then((map) => {
@@ -73,10 +81,17 @@ router.post('/', (req, res, next) => {
 });
 
 router.put('/:id', (req, res, next) => {
-  const result = Map.findByIdAndUpdate(req.params.id, req.body, { new: true }).exec();
+  req.body.owner = req.user._id;
+
+  const result = Map.findOneAndUpdate({ _id: req.params.id, owner: req.user._id }, req.body, { new: true }).exec();
 
   result.then((map) => {
-    res.send(map);
+    if (map === null) {
+      res.status(403);
+      res.send({ errors: [{ status: 403, title: 'Update failed', detail: 'Could not update the requested map. Either it does not exist or you do not have permission to modify it.' }] });
+    } else {
+      res.send(map);
+    }
   }).catch((err) => {
     res.status(500);
     res.send({ errors: [{ status: 500, title: 'An unexpected error occurred', detail: err }] });
@@ -84,10 +99,17 @@ router.put('/:id', (req, res, next) => {
 });
 
 router.delete('/:id', (req, res, next) => {
-  const result = Map.findByIdAndRemove(req.params.id).exec();
+  req.body.owner = req.user._id;
+
+  const result = Map.findOneAndRemove({ _id: req.params.id, owner: req.user._id }).exec();
 
   result.then((map) => {
-    res.send(map);
+    if (map === null) {
+      res.status(403);
+      res.send({ errors: [{ status: 403, title: 'Delete failed', detail: 'Could not delete the requested map. Either it does not exist or you do not have permission to modify it.' }] });
+    } else {
+      res.send(map);
+    }
   }).catch((err) => {
     res.status(500);
     res.send({ errors: [{ status: 500, title: 'An unexpected error occurred', detail: err }] });

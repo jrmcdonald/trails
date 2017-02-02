@@ -14,14 +14,14 @@ chai.use(chaiPromised);
 const file = join(__dirname, '../data/simple-user.json');
 const data = JSON.parse(fs.readFileSync(file, 'utf8'));
 
-const User = mongoose.model('User');
+const MUser = mongoose.model('User');
 
 mongoose.Promise = global.Promise;
 
 describe('User Model Tests', function () {
   describe('Validation Tests', function () {
     it('should allow valid data', function () {
-      const map = new User(data);
+      const map = new MUser(data);
       return expect(map.validate()).to.be.fulfilled;
     });
 
@@ -29,7 +29,7 @@ describe('User Model Tests', function () {
       const copiedData = JSON.parse(JSON.stringify(data));
       delete copiedData.email;
 
-      const map = new User(copiedData);
+      const map = new MUser(copiedData);
       return expect(map.validate()).to.be.rejected;
     });
 
@@ -37,20 +37,20 @@ describe('User Model Tests', function () {
       const copiedData = JSON.parse(JSON.stringify(data));
       delete copiedData.password;
 
-      const map = new User(copiedData);
+      const map = new MUser(copiedData);
       return expect(map.validate()).to.be.rejected;
     });
   });
 
   describe('Functions Tests', function () {
-    const newUser = new User(data);
+    const newUser = new MUser(data);
 
     before(function () {
-      return expect(User.remove({})).to.be.fulfilled;
+      return expect(MUser.remove({})).to.be.fulfilled;
     });
 
     after(function () {
-      return expect(User.remove({})).to.be.fulfilled;
+      return expect(MUser.remove({})).to.be.fulfilled;
     });
 
     it('should save users to the database', function () {
@@ -58,11 +58,11 @@ describe('User Model Tests', function () {
     });
 
     it('should find users in the database', function () {
-      return expect(User.findById(newUser.id).exec()).to.be.fulfilled;
+      return expect(MUser.findById(newUser.id).exec()).to.be.fulfilled;
     });
 
     it('should hash user\'s passwords when saving them to the dabatase', function () {
-      const find = User.findById(newUser.id).exec();
+      const find = MUser.findById(newUser.id).exec();
 
       const comparison = find.then((user) => {
         bcrypt.compare(data.password, user.password);
@@ -72,7 +72,7 @@ describe('User Model Tests', function () {
     });
 
     it('should find and update users in the database', function () {
-      const find = User.findById(newUser.id).exec();
+      const find = MUser.findById(newUser.id).exec();
 
       const update = find.then((user) => {
         user.email = 'updated@example.org';

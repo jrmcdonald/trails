@@ -1,0 +1,12 @@
+{
+  "users": [
+    {
+      "email": "userA@example.org",
+      "password": "2;?BG7gqda6xNj_1ATQe#B+6m"
+    },
+    {
+      "email": "userB@example.org",
+      "password": "3;?BG7gqda6xNj_1ATQe#B+6m"
+    }
+  ]
+}

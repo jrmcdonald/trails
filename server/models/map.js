@@ -45,6 +45,10 @@ const MapSchema = new Schema({
     $type: String,
     required: true,
   },
+  owner: {
+    $type: String,
+    required: true,
+  },
   data: {
     type: {
       $type: String,

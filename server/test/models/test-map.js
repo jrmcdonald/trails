@@ -13,14 +13,14 @@ chai.use(chaiPromised);
 const file = join(__dirname, '../data/simple-map-2-features.json');
 const data = JSON.parse(fs.readFileSync(file, 'utf8'));
 
-const Map = mongoose.model('Map');
+const MMap = mongoose.model('Map');
 
 mongoose.Promise = global.Promise;
 
 describe('Map Model Tests', function () {
   describe('Validation Tests', function () {
     it('should allow valid data', function () {
-      const map = new Map(data);
+      const map = new MMap(data);
       return expect(map.validate()).to.be.fulfilled;
     });
 
@@ -28,7 +28,15 @@ describe('Map Model Tests', function () {
       const copiedData = JSON.parse(JSON.stringify(data));
       delete copiedData.name;
 
-      const map = new Map(copiedData);
+      const map = new MMap(copiedData);
+      return expect(map.validate()).to.be.rejected;
+    });
+
+    it('should require map.owner', function () {
+      const copiedData = JSON.parse(JSON.stringify(data));
+      delete copiedData.owner;
+
+      const map = new MMap(copiedData);
       return expect(map.validate()).to.be.rejected;
     });
 
@@ -36,7 +44,7 @@ describe('Map Model Tests', function () {
       const copiedData = JSON.parse(JSON.stringify(data));
       copiedData.data.type = 'InvalidValue';
 
-      const map = new Map(copiedData);
+      const map = new MMap(copiedData);
       return expect(map.validate()).to.be.rejected;
     });
 
@@ -44,7 +52,7 @@ describe('Map Model Tests', function () {
       const copiedData = JSON.parse(JSON.stringify(data));
       copiedData.data.features = [];
 
-      const map = new Map(copiedData);
+      const map = new MMap(copiedData);
       return expect(map.validate()).to.be.fulfilled;
     });
 
@@ -52,7 +60,7 @@ describe('Map Model Tests', function () {
       const copiedData = JSON.parse(JSON.stringify(data));
       copiedData.data.features[0].type = 'InvalidValue';
 
-      const map = new Map(copiedData);
+      const map = new MMap(copiedData);
       return expect(map.validate()).to.be.rejected;
     });
 
@@ -60,7 +68,7 @@ describe('Map Model Tests', function () {
       const copiedData = JSON.parse(JSON.stringify(data));
       delete copiedData.data.features[0].properties.name;
 
-      const map = new Map(copiedData);
+      const map = new MMap(copiedData);
       return expect(map.validate()).to.be.rejected;
     });
 
@@ -68,7 +76,7 @@ describe('Map Model Tests', function () {
       const copiedData = JSON.parse(JSON.stringify(data));
       copiedData.data.features[0].properties.name = [];
 
-      const map = new Map(copiedData);
+      const map = new MMap(copiedData);
       return expect(map.validate()).to.be.rejected;
     });
 
@@ -76,7 +84,7 @@ describe('Map Model Tests', function () {
       const copiedData = JSON.parse(JSON.stringify(data));
       delete copiedData.data.features[0].geometry.type;
 
-      const map = new Map(copiedData);
+      const map = new MMap(copiedData);
       return expect(map.validate()).to.be.rejected;
     });
 
@@ -84,7 +92,7 @@ describe('Map Model Tests', function () {
       const copiedData = JSON.parse(JSON.stringify(data));
       copiedData.data.features[0].geometry.type = [];
 
-      const map = new Map(copiedData);
+      const map = new MMap(copiedData);
       return expect(map.validate()).to.be.rejected;
     });
 
@@ -92,7 +100,7 @@ describe('Map Model Tests', function () {
       const copiedData = JSON.parse(JSON.stringify(data));
       copiedData.data.features[0].geometry.coordinates = [];
 
-      const map = new Map(copiedData);
+      const map = new MMap(copiedData);
       return expect(map.validate()).to.be.rejected;
     });
 
@@ -100,7 +108,7 @@ describe('Map Model Tests', function () {
       const copiedData = JSON.parse(JSON.stringify(data));
       copiedData.data.features[0].geometry.coordinates[0] = [-4.078014492988587];
 
-      const map = new Map(copiedData);
+      const map = new MMap(copiedData);
       return expect(map.validate()).to.be.rejected;
     });
 
@@ -108,20 +116,20 @@ describe('Map Model Tests', function () {
       const copiedData = JSON.parse(JSON.stringify(data));
       copiedData.data.features[0].geometry.coordinates[0] = [-4.078014492988587, 53.0686355323667, 1, 1];
 
-      const map = new Map(copiedData);
+      const map = new MMap(copiedData);
       return expect(map.validate()).to.be.rejected;
     });
   });
 
   describe('Functions Tests', function () {
-    const newMap = new Map(data);
+    const newMap = new MMap(data);
 
     before(function () {
-      return expect(Map.remove({})).to.be.fulfilled;
+      return expect(MMap.remove({})).to.be.fulfilled;
     });
 
     after(function () {
-      return expect(Map.remove({})).to.be.fulfilled;
+      return expect(MMap.remove({})).to.be.fulfilled;
     });
 
     it('should save maps to the database', function () {
@@ -129,11 +137,11 @@ describe('Map Model Tests', function () {
     });
 
     it('should find maps in the database', function () {
-      return expect(Map.findById(newMap.id).exec()).to.be.fulfilled;
+      return expect(MMap.findById(newMap.id).exec()).to.be.fulfilled;
     });
 
     it('should find and update maps in the database', function () {
-      const find = Map.findById(newMap.id).exec();
+      const find = MMap.findById(newMap.id).exec();
 
       const update = find.then((map) => {
         map.name = 'Simple Map 2 Features (Updated)';
