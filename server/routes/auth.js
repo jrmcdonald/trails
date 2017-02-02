@@ -10,7 +10,8 @@ const User = mongoose.model('User');
 mongoose.Promise = global.Promise;
 
 router.post('/', (req, res, next) => {
-  const result = User.findOne({ email: req.body.email }).exec();
+  const emailLower = req.body.email.toLowerCase();
+  const result = User.findOne({ email: emailLower }).exec();
 
   result.then((user) => {
     if (!user) {
