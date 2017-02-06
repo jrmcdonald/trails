@@ -38,12 +38,3 @@ npm run server:test
 
 npm start
 ```
-
-## Todo
-
-- [x] Error handling for service calls.
-- [x] Delete saved maps.
-- [x] Passport authentication for API.
-- [x] Elevation data using Bing Elevation API.
-- [ ] Import data from GeoJSON, GPX or KML files.
-- [x] Search for map destinations.
