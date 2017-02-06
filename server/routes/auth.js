@@ -22,7 +22,7 @@ router.post('/', (req, res, next) => {
 
       compare.then((match) => {
         if (match) {
-          const token = jwt.sign({ id: user._id }, process.env.APP_AUTH_SECRET, { expiresIn: 10080 });
+          const token = jwt.sign({ id: user._id, email: user.email }, process.env.APP_AUTH_SECRET, { expiresIn: 10080 });
 
           res.send({ data: { token } });
         } else {
@@ -32,15 +32,15 @@ router.post('/', (req, res, next) => {
       }).catch((err) => {
         logger.error(err);
 
-        res.status(409);
-        res.send({ errors: [{ status: 409, title: 'Authentication Failed', detail: 'An unexpected error occurred during authentication. Please try again.' }] });
+        res.status(500);
+        res.send({ errors: [{ status: 500, title: 'Authentication Failed', detail: 'An unexpected error occurred during authentication. Please try again.' }] });
       });
     }
   }).catch((err) => {
     logger.error(err);
 
-    res.status(409);
-    res.send({ errors: [{ status: 409, title: 'Authentication Failed', detail: 'An unexpected error occurred during authentication. Please try again.' }] });
+    res.status(500);
+    res.send({ errors: [{ status: 500, title: 'Authentication Failed', detail: 'An unexpected error occurred during authentication. Please try again.' }] });
   });
 });
 
