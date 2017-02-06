@@ -9,18 +9,18 @@
       <form name="mapLoadForm">
         <div class="form-group">
           <label for="mapSelect">Choose Map:</label>
-            <select class="form-control" name="mapSelect" id="mapSelect" ng-model="model.selectedMap" ng-options="map.id as map.name for map in maps" required></select>
+            <select class="form-control" name="mapSelect" id="mapSelect" ng-model="model.selectedMap" ng-options="map.id as map.name for map in maps" ng-disabled="maps.length === 0" required></select>
         </div>
         <div class="form-group">
-            <button class="btn btn-default" ng-click="loadMap()" ng-disabled="isBusy()">
+            <button class="btn btn-default" ng-click="loadMap()" ng-disabled="isBusy() || maps.length === 0">
               <span ng-hide="state.loading">Load</span>
               <i class="fa fa-spinner fa-pulse" ng-show="state.loading"></i>
             </button>
-            <button class="btn btn-default" ng-click="updateMap()" ng-disabled="isBusy()">
+            <button class="btn btn-default" ng-click="updateMap()" ng-disabled="isBusy() || maps.length === 0">
               <span ng-hide="state.updating">Update</span>
               <i class="fa fa-spinner fa-pulse" ng-show="state.updating"></i>
             </button>
-            <button class="btn btn-danger" ng-click="deleteMap()" ng-disabled="isBusy()">
+            <button class="btn btn-danger" ng-click="deleteMap()" ng-disabled="isBusy() || maps.length === 0">
               <span ng-hide="state.deleting">Delete</span>
               <i class="fa fa-spinner fa-pulse" ng-show="state.deleting"></i>
             </button>

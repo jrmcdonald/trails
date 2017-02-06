@@ -28,6 +28,8 @@ module.exports = function MapDetailsCtrl($scope, $exceptionHandler, $sanitize, l
         } else {
           $scope.model.selectedMap = $scope.maps[0].id;
         }
+      } else {
+        $scope.maps = [];
       }
     });
   };
