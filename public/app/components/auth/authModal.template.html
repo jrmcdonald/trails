@@ -1,0 +1,52 @@
+<div class="modal-header">
+  <button type="button" class="close" aria-label="Close" ng-click="close()"><span aria-hidden="true">&times;</span></button>
+  <h3 class="modal-title" id="modal-title">Login / Register</h3>
+</div>
+<div class="modal-body" id="modal-body">
+  <div class="row">
+    <div class="col-md-6">
+      <h4>Login</h4>
+      <form name="authCtrl.loginForm" ng-submit="authCtrl.loginForm.$valid && authCtrl.authenticateUser()" novalidate>
+        <div class="form-group" ng-class="{ 'has-error': authCtrl.loginForm.email.$touched && authCtrl.loginForm.email.$invalid }">
+          <label for="email">Email:</label>
+          <input type="email" class="form-control" name="email" id="email" ng-model="authCtrl.credentials.login.email" ng-minlength="1" required>
+          <error-messages element="authCtrl.loginForm.email"></error-messages>
+        </div>
+        <div class="form-group" ng-class="{ 'has-error': authCtrl.loginForm.password.$touched && authCtrl.loginForm.password.$invalid }">
+          <label for="password">Password:</label>
+          <input type="password" class="form-control" name="password" id="password" ng-model="authCtrl.credentials.login.password" ng-minlength="8" required>
+          <error-messages element="authCtrl.loginForm.password"></error-messages>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary" ng-disabled="authCtrl.isBusy()">Login</button>
+        </div>
+      </form>
+    </div>
+    <div class="col-md-6">
+      <h4>Register</h4>
+      <form name="authCtrl.registerForm" ng-submit="authCtrl.registerForm.$valid && authCtrl.registerUser()" novalidate>
+        <div class="form-group" ng-class="{ 'has-error': authCtrl.registerForm.email.$touched && authCtrl.registerForm.email.$invalid }">
+          <label for="email">Email:</label>
+          <input type="email" class="form-control" name="email" id="email" ng-model="authCtrl.credentials.register.email" ng-minlength="1" required>
+          <error-messages element="authCtrl.registerForm.email"></error-messages>
+        </div>
+        <div class="form-group" ng-class="{ 'has-error': authCtrl.registerForm.password.$touched && authCtrl.registerForm.password.$invalid }">
+          <label for="password">Password (min 8 characters):</label>
+          <input type="password" class="form-control" name="password" id="password" ng-model="authCtrl.credentials.register.password" ng-minlength="8" required>
+          <error-messages element="authCtrl.registerForm.password"></error-messages>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary" ng-disabled="authCtrl.isBusy()">Register</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1">
+      <div uib-alert ng-repeat="alert in authCtrl.alerts" ng-class="'alert-' + (alert.type || 'warning')" close="closeAlert($index)">{{ alert.msg }}</div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-default" ng-click="close()">Close</button>
+</div>

@@ -61,6 +61,10 @@ amdefine@>=0.0.4:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/amdefine/-/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
 
+angular-jwt@^0.1.9:
+  version "0.1.9"
+  resolved "https://registry.yarnpkg.com/angular-jwt/-/angular-jwt-0.1.9.tgz#db8bcf18f05aa57320ac2fda161d7e9622c099c3"
+
 angular-messages@^1.5.8:
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/angular-messages/-/angular-messages-1.6.1.tgz#da9546d94b55eb152daaa9b9147059f7dec81435"

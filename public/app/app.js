@@ -1,5 +1,6 @@
 const angular = require('angular');
 
+require('angular-jwt');
 require('angular-messages');
 require('angular-ui-bootstrap');
 require('angular-sanitize');
@@ -9,6 +10,8 @@ require('leaflet-control-geocoder');
 require('leaflet-draw');
 require('ui-leaflet');
 require('ui-leaflet-draw');
+
+const AppConfig = require('./components/common/config/app.config');
 
 const MapCtrl = require('./components/map/map.controller');
 const MapDataService = require('./components/map/map.service');
@@ -27,10 +30,20 @@ const DownloadCtrl = require('./components/download/download.controller');
 const DownloadDirectives = require('./components/download/download.directives');
 const DownloadModalCtrl = require('./components/download/downloadModal.controller');
 
+const AuthCtrl = require('./components/auth/auth.controller');
+const AuthDirectives = require('./components/auth/auth.directives');
+const AuthService = require('./components/auth/auth.service');
+const AuthModalCtrl = require('./components/auth/authModal.controller');
+const UserService = require('./components/auth/users.service');
+
 const FormDirectives = require('./components/common/forms/form.directives');
+
+const NavCtrl = require('./components/common/nav/nav.controller');
 const NavDirectives = require('./components/common/nav/nav.directives');
 
-angular.module('trailsApp', ['nemLogging', 'ngMessages', 'ngSanitize', 'ui-leaflet', 'ui.bootstrap']);
+angular.module('trailsApp', ['angular-jwt', 'nemLogging', 'ngMessages', 'ngSanitize', 'ui-leaflet', 'ui.bootstrap'])
+
+angular.module('trailsApp').config(AppConfig);
 
 angular.module('trailsApp').controller('MapCtrl', ['$scope', '$compile', 'leafletBoundsHelpers', 'leafletData', 'leafletDrawEvents', MapCtrl]);
 angular.module('trailsApp').factory('mapDataService', MapDataService);
@@ -52,5 +65,13 @@ angular.module('trailsApp').controller('DownloadCtrl', ['$scope', DownloadCtrl])
 angular.module('trailsApp').directive('downloadModal', DownloadDirectives.downloadModal);
 angular.module('trailsApp').controller('DownloadModalCtrl', ['$scope', '$uibModal', DownloadModalCtrl]);
 
+angular.module('trailsApp').controller('AuthCtrl', ['$scope', '$exceptionHandler', '$sanitize', 'authService', 'userService', AuthCtrl]);
+angular.module('trailsApp').directive('authModal', AuthDirectives.authModal);
+angular.module('trailsApp').controller('AuthModalCtrl', ['$scope', '$uibModal', AuthModalCtrl]);
+angular.module('trailsApp').factory('authService', ['$http', '$window', 'jwtHelper', AuthService]);
+angular.module('trailsApp').factory('userService', UserService);
+
 angular.module('trailsApp').directive('errorMessages', FormDirectives.errorMessages);
+
+angular.module('trailsApp').controller('NavCtrl', ['$scope', 'authService', NavCtrl]);
 angular.module('trailsApp').directive('navigation', NavDirectives.nav);

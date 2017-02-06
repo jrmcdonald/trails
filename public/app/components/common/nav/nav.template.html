@@ -1,12 +1,28 @@
-<div class="navbar navbar-fixed-top navbar-default trails-controls">
-    <div id="nav navbar-nav">
-        <a href="#" class="nav-item nav-link" ng-controller="MapDetailsModalCtrl" ng-click="openMapDetailsModal()">
-            <i class="fa fa-map fa-lg fa-fw" aria-hidden="true"></i>
-            <span>Maps</span>
-        </a>
-        <a href="#" class="nav-item nav-link" ng-controller="DownloadModalCtrl" ng-click="openDownloadModal()">
-            <i class="fa fa-download fa-lg fa-fw" aria-hidden="true"></i>
-            <span>Download</span>
-        </a>
-    </div>
+<div class="navbar navbar-fixed-top navbar-default trails-controls" ng-controller="NavCtrl as navCtrl">
+    <ul class="nav navbar-nav">
+        <li ng-show="navCtrl.isAuthenticated()">
+            <a href="#" ng-controller="MapDetailsModalCtrl" ng-click="openMapDetailsModal()">
+                <i class="fa fa-map fa-lg fa-fw" aria-hidden="true"></i>
+                <span>Maps</span>
+            </a>
+        </li>
+        <li>
+            <a href="#" ng-controller="DownloadModalCtrl" ng-click="openDownloadModal()">
+                <i class="fa fa-download fa-lg fa-fw" aria-hidden="true"></i>
+                <span>Download</span>
+            </a>
+        </li>
+        <li uib-dropdown is-open="navCtrl.acctDropdown.isOpen">
+            <a href="#" id="acct-sub-link" uib-dropdown-toggle>
+                <i class="fa fa-user fa-lg fa-fw" aria-hidden="true"></i>
+                <span>Account</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-right dropdown-center" uib-dropdown-menu aria-labelledby="acct-sub-link">
+                <li role="menuitem" class="dropdown-header" ng-hide="navCtrl.isAuthenticated()">Hello. Please sign in.</li>
+                <li role="menuitem" class="dropdown-header truncate" ng-show="navCtrl.isAuthenticated()">Hello, {{ navCtrl.getEmail() }}</li>
+                <li role="menuitem" class="dropdown-center" ng-hide="navCtrl.isAuthenticated()"><button href="#" class="btn btn-primary" ng-controller="AuthModalCtrl" ng-click="openAuthModal()">Login</button></li>
+                <li role="menuitem" class="dropdown-center" ng-show="navCtrl.isAuthenticated()"><button href="#" class="btn btn-danger" ng-click="navCtrl.logout()">Logout</button></li>
+            </ul>
+        </li> 
+    </ul>
 </div>
