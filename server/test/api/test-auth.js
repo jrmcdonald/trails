@@ -36,7 +36,7 @@ describe('Auth API Tests', function () {
 
   it('should authenticate a valid user', function () {
     const p = chai.request(app)
-      .post('/auth')
+      .post('/api/auth')
       .send(data)
       .then((res) => {
         expect(res.body).to.have.property('data');
@@ -52,7 +52,7 @@ describe('Auth API Tests', function () {
     copiedData.email = 'invalid@example.org';
 
     const p = chai.request(app)
-      .post('/auth')
+      .post('/api/auth')
       .send(copiedData)
       .catch((err) => {
         expect(err).to.have.status(403);
@@ -66,7 +66,7 @@ describe('Auth API Tests', function () {
     copiedData.password = 'badpassword';
 
     const p = chai.request(app)
-      .post('/auth')
+      .post('/api/auth')
       .send(copiedData)
       .catch((err) => {
         expect(err).to.have.status(403);

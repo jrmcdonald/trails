@@ -33,7 +33,7 @@ describe('Elevations API Tests', function () {
 
     const postAuth = preAuth.then(() =>
       chai.request(app)
-        .post('/auth')
+        .post('/api/auth')
         .send(userData)
         .then((res) => {
           token = res.body.data.token;

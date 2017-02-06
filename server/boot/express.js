@@ -30,8 +30,8 @@ module.exports = function bootExpress(app) {
 
   app.use('/api/elevations', passport.authenticate('jwt', { session: false }), elevations);
   app.use('/api/maps', passport.authenticate('jwt', { session: false }), maps);
-  app.use('/users', users);
-  app.use('/auth', auth);
+  app.use('/api/users', users);
+  app.use('/api/auth', auth);
 
   // catch 404 and forward to error handler
   app.use((req, res, next) => {

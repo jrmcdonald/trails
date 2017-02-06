@@ -33,7 +33,7 @@ describe('Users API Tests', function () {
     delete copiedData.email;
 
     const p = chai.request(app)
-      .post('/users')
+      .post('/api/users')
       .send(copiedData)
       .catch((err) => {
         expect(err).to.have.status(400);
@@ -47,7 +47,7 @@ describe('Users API Tests', function () {
     delete copiedData.password;
 
     const p = chai.request(app)
-      .post('/users')
+      .post('/api/users')
       .send(copiedData)
       .catch((err) => {
         expect(err).to.have.status(400);
@@ -58,7 +58,7 @@ describe('Users API Tests', function () {
 
   it('should create a new user', function () {
     const p = chai.request(app)
-      .post('/users')
+      .post('/api/users')
       .send(data)
       .then((res) => {
         expect(res.body).to.have.property('data');
@@ -71,7 +71,7 @@ describe('Users API Tests', function () {
 
   it('should fail to create a duplicate user', function () {
     const p = chai.request(app)
-      .post('/users')
+      .post('/api/users')
       .send(data)
       .catch((err) => {
         expect(err).to.have.status(409);

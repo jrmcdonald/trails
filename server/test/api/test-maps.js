@@ -67,7 +67,7 @@ describe('Maps API Tests', function () {
 
     before(function () {
       const auth = chai.request(app)
-        .post('/auth')
+        .post('/api/auth')
         .send(userData.users[0])
         .then((res) => {
           token = res.body.data.token;
@@ -205,7 +205,7 @@ describe('Maps API Tests', function () {
 
     before(function () {
       const auth = chai.request(app)
-        .post('/auth')
+        .post('/api/auth')
         .send(userData.users[1])
         .then((res) => {
           token = res.body.data.token;
