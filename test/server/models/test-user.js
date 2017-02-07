@@ -7,7 +7,7 @@ const fs = require('fs');
 const join = require('path').join;
 const mongoose = require('mongoose');
 
-require('../../app');
+require('../../../server/app');
 
 chai.use(chaiPromised);
 

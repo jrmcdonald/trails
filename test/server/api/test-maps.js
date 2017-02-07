@@ -8,7 +8,7 @@ const fs = require('fs');
 const join = require('path').join;
 const mongoose = require('mongoose');
 
-const app = require('../../app');
+const app = require('../../../server/app');
 
 chai.use(chaiHttp);
 chai.use(chaiPromised);
