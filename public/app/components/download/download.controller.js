@@ -24,9 +24,17 @@ module.exports = function DownloadCtrl($scope) {
   };
 
   $scope.download = function download() {
+    let mapName = '';
+
+    if (typeof $grandParentScope.loadedMap !== 'undefined' && $grandParentScope.loadedMap !== null) {
+      mapName = $grandParentScope.loadedMap.name;
+    } else {
+      mapName = 'Route1';
+    }
+
     const format = $scope.exportFormat;
     const data = $scope.dataTypes[format].output($grandParentScope.features);
-    const filename = `Route1.${$scope.dataTypes[format].ext}`;
+    const fileName = `${mapName}.${$scope.dataTypes[format].ext}`;
     const options = {
       type: `${$scope.dataTypes[format].mime};charset=utf-8`,
     };
@@ -34,7 +42,7 @@ module.exports = function DownloadCtrl($scope) {
     // http://stackoverflow.com/a/20194533
     const tempElem = window.document.createElement('a');
     tempElem.href = window.URL.createObjectURL(new Blob([data], options));
-    tempElem.download = filename;
+    tempElem.download = fileName;
 
     document.body.appendChild(tempElem);
     tempElem.click();

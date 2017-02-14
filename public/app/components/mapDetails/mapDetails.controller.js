@@ -1,5 +1,5 @@
 module.exports = function MapDetailsCtrl($scope, $exceptionHandler, $sanitize, leafletBoundsHelpers, mapDataService, orderByFilter) {
-  const $grandParentScope = $scope.$parent.$parent;
+  const $grandParentScope = $scope.$parent.$parent.$parent;
 
   $scope.model = {
     selectedMap: null,
