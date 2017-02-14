@@ -3,19 +3,17 @@ module.exports = function TrackDetailsService(ElevationService) {
     return new Promise((resolve, reject) => {
       const latlngs = path.getLatLngs();
 
-      ElevationService.getPoints(latlngs).then((data) => {
-        const elevations = data.resourceSets[0].resources[0].elevations;
-        console.log(elevations);
+      ElevationService.getPoints(latlngs).then((elevations) => {
         let elevationGain = 0;
         let prevElevation = null;
 
-        for (const elevation of elevations) {
+        elevations.forEach((elevation) => {
           if (prevElevation !== null && prevElevation < elevation) {
             elevationGain += elevation - prevElevation;
           }
 
           prevElevation = elevation;
-        }
+        });
 
         resolve(elevationGain);
       }).catch((err) => {
