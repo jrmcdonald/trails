@@ -44,9 +44,9 @@ exports.minutesFilter = function elevationFilter($filter) {
     if (minutes < 60) {
       time = `${minutes} mins`;
     } else if (minutes % 60 === 0) {
-      time = `${minutes / 60} hrs`;
+      time = `${Math.floor(minutes / 60)} hrs`;
     } else {
-      time = `${minutes / 60} hrs ${minutes % 60} mins`;
+      time = `${Math.floor(minutes / 60)} hrs ${minutes % 60} mins`;
     }
 
     return time;
