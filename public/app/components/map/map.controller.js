@@ -56,7 +56,13 @@ module.exports = function MapCtrl($scope, $compile, leafletBoundsHelpers, leafle
 
       $scope.features.addLayer(layer);
     },
-    edited() {},
+    edited(e, leafletEvent, leafletObject, model, modelName) {
+      const layers = leafletEvent.layers;
+
+      layers.eachLayer((layer) => {
+        $scope.attachPopup(layer);
+      });
+    },
     deleted() {},
     drawstart() {},
     drawstop() {},
@@ -102,6 +108,7 @@ module.exports = function MapCtrl($scope, $compile, leafletBoundsHelpers, leafle
   });
 
   $scope.attachPopup = function attachPopup(layer) {
+    layer.unbindPopup();
     const popupScope = $scope.$new(true);
     popupScope.layer = layer;
     const popupHtml = $compile('<track-details-popup></track-details-popup>')(popupScope)[0];
