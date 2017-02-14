@@ -56,7 +56,7 @@ angular.module('trailsApp').controller('MapDetailsCtrl', ['$scope', '$exceptionH
 angular.module('trailsApp').directive('mapDetailsModal', MapDetailsDirectives.mapDetailsModal);
 angular.module('trailsApp').controller('MapDetailsModalCtrl', ['$scope', '$uibModal', MapDetailsModalCtrl]);
 
-angular.module('trailsApp').controller('TrackDetailsCtrl', ['$scope', 'trackDetailsService', TrackDetailsCtrl]);
+angular.module('trailsApp').controller('TrackDetailsCtrl', ['$scope', '$exceptionHandler', 'authService', 'trackDetailsService', TrackDetailsCtrl]);
 angular.module('trailsApp').directive('trackDetailsPopup', TrackDetailsDirectives.trackDetailsPopup);
 angular.module('trailsApp').factory('trackDetailsService', ['elevationService', TrackDetailsService]);
 angular.module('trailsApp').factory('elevationService', ElevationService);

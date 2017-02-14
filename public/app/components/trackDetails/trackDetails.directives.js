@@ -2,7 +2,6 @@ exports.trackDetailsPopup = function trackDetailsPopup($compile, $templateReques
   return {
     restrict: 'E',
     replace: true,
-    controller: 'TrackDetailsCtrl',
     link(scope, element, attrs) {
       const templateUrl = $sce.getTrustedResourceUrl('./app/components/trackDetails/trackDetailsPopup.template.html');
 

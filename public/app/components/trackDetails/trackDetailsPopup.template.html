@@ -1,8 +1,8 @@
 <h5>Track Details</h5>
-<ul class="list-unstyled track-details">
+<ul class="list-unstyled track-details" ng-controller="TrackDetailsCtrl as trkDetCtrl">
   <li>
     <span ng-hide="editing" ng-click="edit()"><b>Name:</b> {{ layer.feature.properties.name }}</span>
-    <form class="form-inline" ng-show="editing" ng-submit="save()">
+    <form class="form-inline" ng-show="editing" ng-submit="trkDetCtrl.save()">
       <div class="form-group">
         <label for="popupPathName">Name:</label>
         <input type="text" class="form-control input-sm" id="popupPathName" ng-model="layer.feature.properties.name">
@@ -10,14 +10,14 @@
           <span class="sr-only">Save</span>
           <i class="fa fa-check fa-fw" aria-hidden="true"></i>
         </button>
-        <button class="btn btn-default" ng-click="reset()">
+        <button class="btn btn-default" ng-click="trkDetCtrl.reset()">
           <span class="sr-only">Reset</span>
           <i class="fa fa-refresh fa-fw" aria-hidden="true"></i>
         </button>
       </div>
     </form>
   </li>
-  <li><b>Distance:</b> {{ distance | distanceFilter:$parent.metric }}</li>
-  <li><b>Elevation Gain:</b> {{ elevationGain | elevationFilter:$parent.metric }}</li>
-  <li><b>Walking Time:</b> {{ walkingTime | minutesFilter }}</li>
+  <li><b>Distance:</b> {{ trkDetCtrl.distance | distanceFilter:$parent.metric }}</li>
+  <li ng-show="trkDetCtrl.isAuthenticated()"><b>Elevation Gain:</b> {{ trkDetCtrl.elevationGain | elevationFilter:$parent.metric }}</li>
+  <li ng-show="trkDetCtrl.isAuthenticated()"><b>Walking Time:</b> {{ trkDetCtrl.walkingTime | minutesFilter }}</li>
 </ul>
