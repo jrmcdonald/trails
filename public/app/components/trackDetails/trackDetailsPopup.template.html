@@ -1,8 +1,8 @@
 <h5>Track Details</h5>
 <ul class="list-unstyled track-details" ng-controller="TrackDetailsCtrl as trkDetCtrl">
   <li>
-    <span ng-hide="editing" ng-click="edit()"><b>Name:</b> {{ layer.feature.properties.name }}</span>
-    <form class="form-inline" ng-show="editing" ng-submit="trkDetCtrl.save()">
+    <span ng-hide="trkDetCtrl.editing" ng-click="trkDetCtrl.edit()"><b>Name:</b> {{ layer.feature.properties.name }}</span>
+    <form class="form-inline" ng-show="trkDetCtrl.editing" ng-submit="trkDetCtrl.save()">
       <div class="form-group">
         <label for="popupPathName">Name:</label>
         <input type="text" class="form-control input-sm" id="popupPathName" ng-model="layer.feature.properties.name">
