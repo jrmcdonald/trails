@@ -80,9 +80,9 @@ angular-simple-logger@0.1.x, angular-simple-logger@^0.1.7, angular-simple-logger
     angular "^1.2"
     debug "^2.2.0"
 
-angular-ui-bootstrap@^2.2.0:
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/angular-ui-bootstrap/-/angular-ui-bootstrap-2.4.0.tgz#1a46e1bfacedcf50281684a88f5548be01546e7a"
+angular-ui-bootstrap@^2.5.6:
+  version "2.5.6"
+  resolved "https://registry.yarnpkg.com/angular-ui-bootstrap/-/angular-ui-bootstrap-2.5.6.tgz#23937322ec641a6fbee16498cc32452aa199e7c5"
 
 angular@1.x, angular@^1.2, angular@^1.5.8:
   version "1.6.1"
