@@ -43,7 +43,7 @@
     "leaflet-draw": "^0.4.0",
     "mocha": "^3.1.2",
     "mongoose": "^4.6.8",
-    "morgan": "^1.7.0",
+    "morgan": "^1.9.1",
     "passport": "^0.3.2",
     "passport-jwt": "^2.2.1",
     "request": "^2.78.0",
