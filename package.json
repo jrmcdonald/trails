@@ -51,7 +51,7 @@
     "tokml": "^0.4.0",
     "ui-leaflet": "^2.0.0",
     "ui-leaflet-draw": "^0.0.3",
-    "vkbeautify": "^0.99.1",
+    "vkbeautify": "^0.99.3",
     "watchify": "^3.8.0",
     "winston": "^2.3.0"
   },

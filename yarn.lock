@@ -4421,9 +4421,9 @@ vinyl@^0.5.0:
     clone-stats "^0.0.1"
     replace-ext "0.0.1"
 
-vkbeautify@^0.99.1:
-  version "0.99.1"
-  resolved "https://registry.yarnpkg.com/vkbeautify/-/vkbeautify-0.99.1.tgz#203f69e07facc04f3cfdafaa0525f865aa7d3fe1"
+vkbeautify@^0.99.3:
+  version "0.99.3"
+  resolved "https://registry.yarnpkg.com/vkbeautify/-/vkbeautify-0.99.3.tgz#4769b3238c5d772c6ea967545dd1df5582f23297"
 
 vm-browserify@~0.0.1:
   version "0.0.4"
